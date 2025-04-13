@@ -11,7 +11,9 @@ const CharacterDetail = () => {
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
-        const res = await axios.get(`/api/characters/${id}`);
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/characters/${id}`
+        );
         setCharacter(res.data);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch character");

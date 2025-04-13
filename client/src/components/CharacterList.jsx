@@ -17,7 +17,9 @@ const CharacterList = () => {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const res = await axios.get("/api/characters");
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/characters`
+        );
         setCharacters(res.data);
       } catch (err) {
         console.error("Error fetching characters:", err);

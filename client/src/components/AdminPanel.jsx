@@ -222,13 +222,21 @@ const AdminPage = () => {
     e.preventDefault();
     try {
       if (formData._id) {
-        await axios.put(`/api/characters/${formData._id}`, formData);
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/api/characters/${formData._id}`,
+          formData
+        );
         showSnackbar("Character updated successfully!");
       } else {
-        await axios.post("/api/characters", formData);
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/characters`,
+          formData
+        );
         showSnackbar("Character created successfully!");
       }
-      const res = await axios.get("/api/characters");
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/characters`
+      );
       setCharacters(res.data);
       resetForm();
       setActiveTab("manage");
@@ -250,7 +258,9 @@ const AdminPage = () => {
     if (window.confirm("Are you sure you want to delete this character?")) {
       setIsLoading(true);
       try {
-        await axios.delete(`/api/characters/${id}`);
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/api/characters/${id}`
+        );
         setCharacters((prev) => prev.filter((c) => c._id !== id));
         showSnackbar("Character deleted successfully!");
       } catch (err) {
