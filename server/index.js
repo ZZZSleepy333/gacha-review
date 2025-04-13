@@ -239,25 +239,25 @@ app.get("/api/characters/:id", async (req, res) => {
   }
 });
 
-const adminAuth = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  if (authHeader && authHeader === `Bearer ${process.env.ADMIN_TOKEN}`) {
-    next();
-  } else {
-    res.status(401).json({ message: "Unauthorized" });
-  }
-};
+// const adminAuth = (req, res, next) => {
+//   const authHeader = req.headers["authorization"];
+//   if (authHeader && authHeader === `Bearer ${process.env.ADMIN_TOKEN}`) {
+//     next();
+//   } else {
+//     res.status(401).json({ message: "Unauthorized" });
+//   }
+// };
 
-// Bảo vệ các route admin
-app.post("/api/characters", adminAuth, async (req, res) => {
-  /* ... */
-});
-app.put("/api/characters/:id", adminAuth, async (req, res) => {
-  /* ... */
-});
-app.delete("/api/characters/:id", adminAuth, async (req, res) => {
-  /* ... */
-});
+// // Bảo vệ các route admin
+// app.post("/api/characters", adminAuth, async (req, res) => {
+//   /* ... */
+// });
+// app.put("/api/characters/:id", adminAuth, async (req, res) => {
+//   /* ... */
+// });
+// app.delete("/api/characters/:id", adminAuth, async (req, res) => {
+//   /* ... */
+// });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
