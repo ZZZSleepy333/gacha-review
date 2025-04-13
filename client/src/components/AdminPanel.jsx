@@ -159,7 +159,9 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const res = await axios.get("/api/characters");
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/characters`
+        );
         setCharacters(res.data);
       } catch (err) {
         console.error("Error fetching characters:", err);
@@ -917,11 +919,7 @@ const AdminPage = () => {
                   <h3 className="mt-2 text-sm font-medium text-gray-900">
                     Không tìm thấy nhân vật
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {searchTerm
-                      ? "Try a different search term"
-                      : "Create your first character"}
-                  </p>
+
                   <div className="mt-6">
                     <button
                       onClick={() => setActiveTab("create")}
