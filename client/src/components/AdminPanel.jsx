@@ -331,7 +331,7 @@ const AdminPage = () => {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">
-            Character Admin Panel
+            Trang quản lý nhân vật
           </h1>
           <div className="flex space-x-4">
             <button
@@ -355,7 +355,7 @@ const AdminPage = () => {
                   : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
             >
-              Manage Characters
+              Quản lý nhân vật
             </button>
           </div>
         </div>
@@ -377,12 +377,12 @@ const AdminPage = () => {
                     {/* Basic Info */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Basic Information
+                        Thông tin cơ bản
                       </h3>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Title
+                          Danh hiệu
                         </label>
                         <input
                           type="text"
@@ -396,7 +396,7 @@ const AdminPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Character Name
+                          Tên nhân vật
                         </label>
                         <input
                           type="text"
@@ -410,7 +410,7 @@ const AdminPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Image URL
+                          Hình ảnh
                         </label>
                         <input
                           type="url"
@@ -438,12 +438,12 @@ const AdminPage = () => {
                     {/* Attributes */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Attributes
+                        Các thông tin khác
                       </h3>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Rarity
+                          Độ hiếm
                         </label>
                         <select
                           name="rarity"
@@ -462,7 +462,7 @@ const AdminPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Character Type
+                          Loại nhân vật
                         </label>
                         <select
                           name="characterType"
@@ -481,7 +481,7 @@ const AdminPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Element
+                          Hệ nguyên tố
                         </label>
                         <select
                           name="attribute"
@@ -500,7 +500,7 @@ const AdminPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Weapon Type
+                          Tầm đánh
                         </label>
                         <select
                           name="weaponType"
@@ -519,7 +519,7 @@ const AdminPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          School
+                          Học viện
                         </label>
                         <select
                           name="school"
@@ -557,7 +557,7 @@ const AdminPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Affiliation
+                          Quan hệ
                         </label>
                         <select
                           name="affiliation"
@@ -578,7 +578,7 @@ const AdminPage = () => {
                     {/* Roles */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Roles
+                        Vai trò nhân vật
                       </h3>
                       <div className="flex flex-wrap gap-2 mb-2">
                         {formData.roles.map((role) => (
@@ -599,7 +599,7 @@ const AdminPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Add Role
+                          Thêm vai trò
                         </label>
                         <select
                           onChange={(e) => handleRoleSelect(e.target.value)}
@@ -629,7 +629,7 @@ const AdminPage = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Max HP
+                            HP ở Level 70
                           </label>
                           <input
                             type="number"
@@ -643,7 +643,7 @@ const AdminPage = () => {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Max Attack
+                            ATK ở level 70
                           </label>
                           <input
                             type="number"
@@ -657,7 +657,7 @@ const AdminPage = () => {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Voice Actor(s)
+                            Lồng tiếng
                           </label>
                           <input
                             type="text"
@@ -671,7 +671,7 @@ const AdminPage = () => {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Illustrator(s)
+                            Minh hoạ
                           </label>
                           <input
                             type="text"
@@ -692,7 +692,7 @@ const AdminPage = () => {
                       </h3>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Skill Name
+                          Tên kỹ năng
                         </label>
                         <input
                           type="text"
@@ -705,7 +705,7 @@ const AdminPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Description
+                          Mô tả
                         </label>
                         <textarea
                           name="chargeSkill.chargeSkillDescription"
@@ -721,11 +721,11 @@ const AdminPage = () => {
                 </div>
                 <div className="space-y-4  rounded-lg ">
                   <h3 className="text-lg font-medium text-gray-900  pb-2">
-                    Detailed Review
+                    Review chi tiết
                   </h3>
                   <div className=" ">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Rating
+                      Tier
                     </label>
                     <div className="flex flex-wrap gap-3">
                       {ratingOptions.map((grade) => (
@@ -768,7 +768,7 @@ const AdminPage = () => {
                   </div>
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Strong Points
+                      Điểm nổi bật
                     </label>
                     <textarea
                       name="strongPoints"
@@ -783,7 +783,7 @@ const AdminPage = () => {
                   {/* Weak Points */}
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Weak Points
+                      Điểm lưu ý
                     </label>
                     <textarea
                       name="weakPoints"
@@ -798,7 +798,7 @@ const AdminPage = () => {
                   {/* Final Review */}
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Final Review
+                      Đánh giá tổng quan
                     </label>
                     <textarea
                       name="finalReview"
@@ -849,12 +849,12 @@ const AdminPage = () => {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
-                        {formData._id ? "Updating..." : "Creating..."}
+                        {formData._id ? "Cập nhật..." : "Đang tạo..."}
                       </>
                     ) : formData._id ? (
-                      "Update Character"
+                      "Cập nhật nhân vật"
                     ) : (
-                      "Create Character"
+                      "Tạo nhân vật"
                     )}
                   </button>
                 </div>
@@ -869,7 +869,7 @@ const AdminPage = () => {
             <div className="p-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h2 className="text-xl font-semibold text-gray-800">
-                  Manage Characters
+                  Quản lý nhân vật
                 </h2>
                 <div className="relative w-full sm:w-64">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -915,7 +915,7 @@ const AdminPage = () => {
                     />
                   </svg>
                   <h3 className="mt-2 text-sm font-medium text-gray-900">
-                    No characters found
+                    Không tìm thấy nhân vật
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">
                     {searchTerm
@@ -940,7 +940,7 @@ const AdminPage = () => {
                           d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                         />
                       </svg>
-                      New Character
+                      Thêm nhân vật mới
                     </button>
                   </div>
                 </div>
@@ -953,25 +953,25 @@ const AdminPage = () => {
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                          Character
+                          Nhân vật
                         </th>
                         <th
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                          Rarity
+                          Độ hiếm
                         </th>
                         <th
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                          Rating
+                          Tier
                         </th>
                         <th
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                          Actions
+                          Hành động
                         </th>
                       </tr>
                     </thead>
@@ -1040,13 +1040,13 @@ const AdminPage = () => {
                               onClick={() => handleEdit(character)}
                               className="text-blue-600 hover:text-blue-900 mr-4"
                             >
-                              Edit
+                              Chỉnh sửa
                             </button>
                             <button
                               onClick={() => handleDelete(character._id)}
                               className="text-red-600 hover:text-red-900"
                             >
-                              Delete
+                              Xoá
                             </button>
                           </td>
                         </tr>

@@ -108,10 +108,10 @@ const CharacterList = () => {
       <div className="bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Gacha Character Reviews
+            Review nhân vật Housamo
           </h1>
           <p className="mt-6 max-w-3xl mx-auto text-xl text-blue-100">
-            Detailed analysis and ratings for all your favorite gacha characters
+            Làm bởi Tokyo Afterschool Summoners VN
           </p>
         </div>
       </div>
@@ -127,7 +127,7 @@ const CharacterList = () => {
                 htmlFor="search"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Search Characters
+                Tìm kiếm nhân vật
               </label>
               <div className="relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -161,7 +161,7 @@ const CharacterList = () => {
                 htmlFor="rarity"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Rarity
+                Độ hiếm
               </label>
               <select
                 id="rarity"
@@ -186,7 +186,7 @@ const CharacterList = () => {
                 htmlFor="attribute"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Element
+                Hệ nguyên tố
               </label>
               <select
                 id="attribute"
@@ -211,7 +211,7 @@ const CharacterList = () => {
                 htmlFor="weaponType"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Weapon Type
+                Tầm đánh
               </label>
               <select
                 id="weaponType"
@@ -235,7 +235,7 @@ const CharacterList = () => {
                 htmlFor="weaponType"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Character Type
+                Loại nhân vật
               </label>
               <select
                 id="characterType"
@@ -279,14 +279,24 @@ const CharacterList = () => {
             </div>
 
             {/* Reset Filters */}
-            {(filters.rarity || filters.attribute || filters.weaponType) && (
+            {(filters.rarity ||
+              filters.attribute ||
+              filters.weaponType ||
+              filters.characterType ||
+              filters.tier) && (
               <button
                 onClick={() =>
-                  setFilters({ rarity: "", attribute: "", weaponType: "" })
+                  setFilters({
+                    rarity: "",
+                    attribute: "",
+                    weaponType: "",
+                    characterType: "",
+                    adminReview: "",
+                  })
                 }
                 className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Reset Filters
+                Reset
               </button>
             )}
           </div>
@@ -313,15 +323,17 @@ const CharacterList = () => {
               />
             </svg>
             <h3 className="mt-2 text-lg font-medium text-gray-900">
-              No characters found
+              Không tìm thấy nhân vật nào
             </h3>
             <p className="mt-1 text-sm text-gray-500">
               {searchTerm ||
               filters.rarity ||
               filters.attribute ||
-              filters.weaponType
-                ? "Try adjusting your search or filters"
-                : "No characters available yet"}
+              filters.weaponType ||
+              filters.characterType ||
+              filters.adminReview
+                ? "Hãy thử tìm kiếm khác"
+                : "Không có nhân vật nào trong danh sách"}
             </p>
           </div>
         ) : (

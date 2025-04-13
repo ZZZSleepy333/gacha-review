@@ -48,7 +48,7 @@ const CharacterDetail = () => {
       <div className="text-center py-16">
         <div className="text-red-500 mb-4">{error}</div>
         <Link to="/" className="text-blue-600 hover:underline">
-          Back to Home
+          Quay về trang chủ
         </Link>
       </div>
     );
@@ -57,9 +57,9 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="text-center py-16">
-        <p>Character not found</p>
+        <p>Không tìm thấy nhân vật</p>
         <Link to="/" className="text-blue-600 hover:underline">
-          Back to Home
+          Quay về trang chủ
         </Link>
       </div>
     );
@@ -117,19 +117,19 @@ const CharacterDetail = () => {
         {/* Basic Info Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-500">Element</h3>
+            <h3 className="text-sm font-medium text-gray-500">Hệ nguyên tố</h3>
             <p className="mt-1 text-sm font-semibold text-gray-900">
               {character.attribute}
             </p>
           </div>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-500">Weapon Type</h3>
+            <h3 className="text-sm font-medium text-gray-500">Tầm đánh</h3>
             <p className="mt-1 text-sm font-semibold text-gray-900">
               {character.weaponType}
             </p>
           </div>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-500">School</h3>
+            <h3 className="text-sm font-medium text-gray-500">Học viện</h3>
             <p className="mt-1 text-sm font-semibold text-gray-900">
               {character.school}
             </p>
@@ -141,7 +141,7 @@ const CharacterDetail = () => {
             </p>
           </div>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-500">Affiliation</h3>
+            <h3 className="text-sm font-medium text-gray-500">Quan hệ</h3>
             <p className="mt-1 text-sm font-semibold text-gray-900">
               {character.affiliation}
             </p>
@@ -151,13 +151,17 @@ const CharacterDetail = () => {
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-blue-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-blue-500">Max HP</h3>
+            <h3 className="text-sm font-medium text-blue-500">
+              HP ở Max Level
+            </h3>
             <p className="mt-1 text-2xl font-bold text-blue-900">
               {character.maxHp}
             </p>
           </div>
           <div className="bg-red-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-red-500">Max Attack</h3>
+            <h3 className="text-sm font-medium text-red-500">
+              ATK ở Max Level
+            </h3>
             <p className="mt-1 text-2xl font-bold text-red-900">
               {character.maxAttack}
             </p>
@@ -166,7 +170,7 @@ const CharacterDetail = () => {
 
         {/* Roles */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Roles</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Vai trò</h2>
           <div className="flex flex-wrap gap-2">
             {character.roles.map((role, i) => (
               <span
@@ -197,11 +201,11 @@ const CharacterDetail = () => {
         {/* Review Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4 col-span-2">
-            Review
+            Đánh giá
           </h2>
           <div className="bg-green-50 p-4 rounded-lg">
             <h2 className="text-xl font-semibold text-green-800 mb-4">
-              Strong Points
+              Điểm nổi bật
             </h2>
             <ul className="space-y-2">
               {character.strongPoints.split("\n").map(
@@ -227,7 +231,7 @@ const CharacterDetail = () => {
           </div>
           <div className="bg-red-50 p-4 rounded-lg">
             <h2 className="text-xl font-semibold text-red-800 mb-4">
-              Weak Points
+              Điểm lưu ý
             </h2>
             <ul className="space-y-2">
               {character.weakPoints.split("\n").map(
@@ -253,7 +257,7 @@ const CharacterDetail = () => {
           </div>
           <div className="bg-gray-50 p-4 rounded-lg col-span-2">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Final Review
+              Đánh giá tổng quan
             </h2>
             <ul className="space-y-2">
               {character.finalReview.split("\n").map(
@@ -274,7 +278,7 @@ const CharacterDetail = () => {
             to="/"
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
           >
-            Back to Character List
+            Quay lại danh sách nhân vật
           </Link>
         </div>
       </div>
