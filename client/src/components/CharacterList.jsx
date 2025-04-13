@@ -11,6 +11,7 @@ const CharacterList = () => {
     attribute: "",
     weaponType: "",
     characterType: "",
+    adminReview: "",
   });
 
   // Fetch characters
@@ -50,13 +51,17 @@ const CharacterList = () => {
     const matchesCharacterType = filters.characterType
       ? character.characterType === filters.characterType
       : true;
+    const matchesAdminReview = filters.adminReview
+      ? character.adminReview === filters.adminReview
+      : true;
 
     return (
       matchesSearch &&
       matchesRarity &&
       matchesAttribute &&
       matchesWeaponType &&
-      matchesCharacterType
+      matchesCharacterType &&
+      matchesAdminReview
     );
   });
 
@@ -69,6 +74,10 @@ const CharacterList = () => {
   );
   const characterTypes = [
     ...new Set(characters.map((c) => c.characterType)),
+  ].filter(Boolean);
+
+  const adminReviews = [
+    ...new Set(characters.map((c) => c.adminReview)),
   ].filter(Boolean);
 
   // Rating color mapping
@@ -163,9 +172,11 @@ const CharacterList = () => {
                 }
               >
                 <option value="">All Rarities</option>
-                <option value="3">3 ★</option>
-                <option value="2">2 ★</option>
                 <option value="1">1 ★</option>
+                <option value="2">2 ★</option>
+                <option value="3">3 ★</option>
+                <option value="4">4 ★</option>
+                <option value="5">5 ★</option>
               </select>
             </div>
 
@@ -238,6 +249,30 @@ const CharacterList = () => {
                 {characterTypes.map((type) => (
                   <option key={type} value={type}>
                     {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="adminReview"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Tier
+              </label>
+              <select
+                id="adminReview"
+                className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
+                value={filters.adminReview}
+                onChange={(e) =>
+                  setFilters({ ...filters, adminReview: e.target.value })
+                }
+              >
+                <option value="">All Elements</option>
+                {adminReviews.map((tier) => (
+                  <option key={tier} value={tier}>
+                    {tier}
                   </option>
                 ))}
               </select>
@@ -379,41 +414,9 @@ const CharacterList = () => {
                       ))}
                     </div>
 
-                    {/* Charge Skill */}
-                    <div className="mt-4">
-                      <h3 className="text-sm font-medium text-gray-900 flex items-center">
-                        <svg
-                          className="h-4 w-4 text-yellow-500 mr-1"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        {character.chargeSkill.chargeSkillName}
-                      </h3>
-                      <p className="mt-1 text-xs text-gray-600 line-clamp-2">
-                        {character.chargeSkill.chargeSkillDescription}
-                      </p>
-                    </div>
-
                     {/* Review Summary */}
                     <div className="mt-4 space-y-2">
                       <div className="flex items-start">
-                        <svg
-                          className="h-4 w-4 text-green-500 mt-0.5 mr-1 flex-shrink-0"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
                         <p className="text-xs text-gray-700 line-clamp-2">
                           {character.finalReview}
                         </p>
