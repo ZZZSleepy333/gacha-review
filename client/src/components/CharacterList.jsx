@@ -86,27 +86,27 @@ const CharacterList = () => {
   // Get unique filter options
   const rarities = [
     {
-      value: "1",
+      value: 1,
       image:
         "https://cdn.housamo.xyz/housamo/unity/Android/ui/button/ui_button_rare1.png",
     },
     {
-      value: "2",
+      value: 2,
       image:
         "https://cdn.housamo.xyz/housamo/unity/Android/ui/button/ui_button_rare2.png",
     },
     {
-      value: "3",
+      value: 3,
       image:
         "https://cdn.housamo.xyz/housamo/unity/Android/ui/button/ui_button_rare3.png",
     },
     {
-      value: "4",
+      value: 4,
       image:
         "https://cdn.housamo.xyz/housamo/unity/Android/ui/button/ui_button_rare4.png",
     },
     {
-      value: "5",
+      value: 5,
       image:
         "https://cdn.housamo.xyz/housamo/unity/Android/ui/button/ui_button_rare5.png",
     },
