@@ -12,7 +12,7 @@ function App() {
           <div className="container mx-auto flex justify-between items-center">
             <Link to="/" className="flex items-center space-x-2">
               <span className="text-white text-xl font-bold">
-                Gacha Reviews
+                Housamo Reviews
               </span>
             </Link>
             {/* <div className="flex space-x-6">
@@ -44,7 +44,7 @@ function App() {
         <main className="container mx-auto px-4 py-8">
           <Routes>
             <Route path="/" element={<CharacterList />} />
-            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/housamovn" element={<AdminPanel />} />
             <Route path="/characters/:id" element={<CharacterDetail />} />
           </Routes>
         </main>
