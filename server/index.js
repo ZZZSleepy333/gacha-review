@@ -7,6 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// const ADMIN_TOKENS = new Set(["leib_olmai", "tanukibeo", "kallankoe"]);
+
 const corsOptions = {
   origin: ["https://gacha-review-2.vercel.app", "http://localhost:3000"],
   optionsSuccessStatus: 200,
@@ -239,25 +241,43 @@ app.get("/api/characters/:id", async (req, res) => {
   }
 });
 
-// const adminAuth = (req, res, next) => {
-//   const authHeader = req.headers["authorization"];
-//   if (authHeader && authHeader === `Bearer ${process.env.ADMIN_TOKEN}`) {
-//     next();
-//   } else {
-//     res.status(401).json({ message: "Unauthorized" });
-//   }
-// };
+// Thêm middleware xác thực
+const authenticateAdmin = (req, res, next) => {
+  const authToken = req.headers["authorization"];
+  const validTokens = process.env.ADMIN_TOKENS.split(","); // Danh sách token hợp lệ
 
-// // Bảo vệ các route admin
-// app.post("/api/characters", adminAuth, async (req, res) => {
-//   /* ... */
-// });
-// app.put("/api/characters/:id", adminAuth, async (req, res) => {
-//   /* ... */
-// });
-// app.delete("/api/characters/:id", adminAuth, async (req, res) => {
-//   /* ... */
-// });
+  if (validTokens.includes(authToken)) {
+    next();
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
+// Bảo vệ các route admin
+app.post("/api/characters", authenticateAdmin, async (req, res) => {
+  /* ... */
+});
+app.put("/api/characters/:id", authenticateAdmin, async (req, res) => {
+  /* ... */
+});
+app.put("/api/characters/:id", authenticateAdmin, async (req, res) => {
+  /* ... */
+});
+app.delete("/api/characters/:id", authenticateAdmin, async (req, res) => {
+  /* ... */
+});
+
+// Thêm route để kiểm tra token
+app.post("/api/validate-token", (req, res) => {
+  const { token } = req.body;
+  const validTokens = process.env.ADMIN_TOKENS.split(",");
+
+  if (validTokens.includes(token)) {
+    res.json({ valid: true });
+  } else {
+    res.json({ valid: false });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

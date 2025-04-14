@@ -145,6 +145,12 @@ const AdminPage = () => {
     message: "",
   });
 
+  const token = localStorage.getItem("adminToken");
+
+  const config = {
+    headers: { Authorization: token },
+  };
+
   // Hàm hiển thị snackbar
   const showSnackbar = (message) => {
     setSnackbar({ show: true, message });
@@ -226,13 +232,15 @@ const AdminPage = () => {
       if (formData._id) {
         await axios.put(
           `${process.env.REACT_APP_API_URL}/api/characters/${formData._id}`,
-          formData
+          formData,
+          config
         );
         showSnackbar("Character updated successfully!");
       } else {
         await axios.post(
           `${process.env.REACT_APP_API_URL}/api/characters`,
-          formData
+          formData,
+          config
         );
         showSnackbar("Character created successfully!");
       }
