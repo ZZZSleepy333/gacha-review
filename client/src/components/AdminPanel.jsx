@@ -132,6 +132,7 @@ const AdminPage = () => {
     chargeSkill: {
       chargeSkillName: "",
       chargeSkillDescription: "",
+      csType: "",
     },
     adminReview: "A",
     strongPoints: "",
@@ -371,10 +372,6 @@ const AdminPage = () => {
         {activeTab === "create" && (
           <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
             <div className="p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                {formData._id ? "Edit Character" : "Create New Character"}
-              </h2>
-
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
                   {/* Left Column */}
@@ -710,6 +707,24 @@ const AdminPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Tầm đánh
+                        </label>
+                        <select
+                          name="csType"
+                          value={formData.csType}
+                          onChange={handleChange}
+                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                          required
+                        >
+                          {weaponTypeOptions.map((weapon) => (
+                            <option key={weapon} value={weapon}>
+                              {weapon}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Mô tả
                         </label>
                         <textarea
@@ -990,10 +1005,10 @@ const AdminPage = () => {
                                 />
                               </div>
                               <div className="ml-4">
-                                <div className="border border-gray-300 text-sm font-medium text-gray-900">
+                                <div className=" text-sm font-medium text-gray-900">
                                   {character.name}
                                 </div>
-                                <div className="border border-gray-300 text-sm text-gray-500">
+                                <div className=" text-sm text-gray-500">
                                   {character.title}
                                 </div>
                               </div>

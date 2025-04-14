@@ -1,4 +1,4 @@
-import { Routes, Route, Link, NavLink, HashRouter } from "react-router-dom";
+import { Routes, Route, Link, HashRouter } from "react-router-dom";
 import CharacterList from "./components/CharacterList";
 import AdminPanel from "./components/AdminPanel";
 import CharacterDetail from "./components/CharacterDetail";
@@ -15,7 +15,7 @@ function App() {
                 Gacha Reviews
               </span>
             </Link>
-            <div className="flex space-x-6">
+            {/* <div className="flex space-x-6">
               <NavLink
                 to="/"
                 className={({ isActive }) =>
@@ -36,7 +36,7 @@ function App() {
               >
                 Admin
               </NavLink>
-            </div>
+            </div> */}
           </div>
         </nav>
 
@@ -54,17 +54,18 @@ function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="md:flex md:justify-between">
               <div className="mb-8 md:mb-0">
-                <h2 className="text-lg font-semibold">Gacha Reviews</h2>
+                <h2 className="text-lg font-semibold">Housamo Reviews</h2>
                 <p className="mt-2 text-sm text-gray-400">
-                  Your ultimate source for character analysis and reviews
+                  Trang tổng hợp Review được làm bởi Tokyo Afterschool Summoners
+                  VN
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-                <div>
+                {/*<div>
                   <h3 className="text-sm font-semibold tracking-wider uppercase">
                     Resources
                   </h3>
-                  {/* <ul className="mt-4 space-y-2">
+                  <ul className="mt-4 space-y-2">
                     <li>
                       <a
                         href=""
@@ -89,22 +90,22 @@ function App() {
                         Builds
                       </a>
                     </li>
-                  </ul> */}
-                </div>
+                  </ul>
+                </div>*/}
                 <div>
                   <h3 className="text-sm font-semibold tracking-wider uppercase">
                     Community
                   </h3>
-                  {/* <ul className="mt-4 space-y-2">
+                  <ul className="mt-4 space-y-2">
                     <li>
                       <a
-                        href=""
+                        href="https://discord.gg/9Pg6AYEaym"
                         className="text-sm text-gray-400 hover:text-white"
                       >
                         Discord
                       </a>
                     </li>
-                    <li>
+                    {/*<li>
                       <a
                         href=""
                         className="text-sm text-gray-400 hover:text-white"
@@ -119,8 +120,8 @@ function App() {
                       >
                         Twitter
                       </a>
-                    </li>
-                  </ul> */}
+                    </li>*/}
+                  </ul>
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold tracking-wider uppercase">
@@ -157,12 +158,13 @@ function App() {
             </div>
             <div className="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
               <p className="text-sm text-gray-400">
-                © {new Date().getFullYear()} Gacha Reviews. All rights reserved.
+                © {new Date().getFullYear()} HousamoVN Reviews. All rights
+                reserved.
               </p>
               <div className="mt-4 md:mt-0">
                 <p className="text-xs text-gray-500">
-                  This is a fan-made site and is not affiliated with any game
-                  company.
+                  Đây là một dự án phi lợi nhuận không liên quan đến bất kỳ công
+                  ty nào.
                 </p>
               </div>
             </div>

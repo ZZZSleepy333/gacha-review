@@ -149,6 +149,21 @@ const characterSchema = new mongoose.Schema(
     chargeSkill: {
       chargeSkillName: { type: String, required: true },
       chargeSkillDescription: { type: String, required: true },
+      csType: {
+        type: String,
+        required: true,
+        enum: [
+          "Slash",
+          "Long Slash",
+          "Thrust",
+          "Blunt",
+          "Shot",
+          "Snipe",
+          "Magic",
+          "None",
+          "All",
+        ],
+      },
     },
     adminReview: {
       type: String,
