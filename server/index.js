@@ -48,7 +48,7 @@ const characterSchema = new mongoose.Schema(
       enum: [
         "Slash",
         "Long Slash",
-        "Pierce",
+        "Thrust",
         "Blunt",
         "Shot",
         "Snipe",

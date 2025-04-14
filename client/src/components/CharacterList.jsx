@@ -105,7 +105,7 @@ const CharacterList = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600">
+      {/* <div className="bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
             Review nhân vật Housamo
@@ -114,7 +114,7 @@ const CharacterList = () => {
             Làm bởi Tokyo Afterschool Summoners VN
           </p>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">

@@ -259,16 +259,10 @@ const CharacterDetail = () => {
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Đánh giá tổng quan
             </h2>
-            <ul className="space-y-2">
-              {character.finalReview.split("\n").map(
-                (point, i) =>
-                  point.trim() && (
-                    <li key={i} className="flex items-start">
-                      <span className="text-gray-700">{point}</span>
-                    </li>
-                  )
-              )}
-            </ul>
+            <div
+              className="prose prose-md text-gray-800 w-full max-w-none"
+              dangerouslySetInnerHTML={{ __html: character.finalReview }}
+            ></div>
           </div>
         </div>
 

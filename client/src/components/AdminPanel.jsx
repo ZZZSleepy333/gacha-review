@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Snackbar from "./Snackbar";
 
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
 const AdminPage = () => {
   // Options for dropdowns
   const rarityOptions = [1, 2, 3, 4, 5];
@@ -32,7 +35,7 @@ const AdminPage = () => {
   const weaponTypeOptions = [
     "Slash",
     "Long Slash",
-    "Pierce",
+    "Thrust",
     "Blunt",
     "Shot",
     "Snipe",
@@ -777,13 +780,12 @@ const AdminPage = () => {
                       value={formData.strongPoints}
                       onChange={handleChange}
                       rows={3}
-                      className="p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       required
                     />
                   </div>
 
-                  {/* Weak Points */}
-                  <div className="">
+                  <div className="mb-6">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Điểm lưu ý
                     </label>
@@ -792,23 +794,22 @@ const AdminPage = () => {
                       value={formData.weakPoints}
                       onChange={handleChange}
                       rows={3}
-                      className="p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       required
                     />
                   </div>
 
-                  {/* Final Review */}
-                  <div className="">
+                  <div className="mb-6">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Đánh giá tổng quan
                     </label>
-                    <textarea
-                      name="finalReview"
+                    <ReactQuill
+                      theme="snow"
                       value={formData.finalReview}
-                      onChange={handleChange}
-                      rows={5}
-                      className="p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
+                      onChange={(value) =>
+                        setFormData((prev) => ({ ...prev, finalReview: value }))
+                      }
+                      className="custom-quill"
                     />
                   </div>
                 </div>
