@@ -44,7 +44,7 @@ function App() {
         <main className="container mx-auto px-4 py-8">
           <Routes>
             <Route path="/" element={<CharacterList />} />
-            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/housamovn" element={<AdminPanel />} />
             <Route path="/characters/:id" element={<CharacterDetail />} />
           </Routes>
         </main>
