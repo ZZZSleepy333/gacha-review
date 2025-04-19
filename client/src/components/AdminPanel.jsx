@@ -132,7 +132,7 @@ const AdminPage = () => {
     chargeSkill: {
       chargeSkillName: "",
       chargeSkillDescription: "",
-      csType: "",
+      csType: weaponTypeOptions[0],
     },
     adminReview: "A",
     strongPoints: "",
