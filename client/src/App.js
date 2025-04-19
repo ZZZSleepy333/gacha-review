@@ -1,4 +1,4 @@
-import { Routes, Route, Link, HashRouter } from "react-router-dom";
+import { Routes, Route, Link, HashRouter, NavLink } from "react-router-dom";
 import CharacterList from "./components/CharacterList";
 import AdminPanel from "./components/AdminPanel";
 import CharacterDetail from "./components/CharacterDetail";
@@ -15,8 +15,8 @@ function App() {
                 Housamo Reviews
               </span>
             </Link>
-            {/* <div className="flex space-x-6">
-              <NavLink
+            <div className="flex space-x-6">
+              {/* <NavLink
                 to="/"
                 className={({ isActive }) =>
                   `text-white hover:text-yellow-200 ${
@@ -35,8 +35,8 @@ function App() {
                 }
               >
                 Admin
-              </NavLink>
-            </div> */}
+              </NavLink> */}
+            </div>
           </div>
         </nav>
 
@@ -44,7 +44,7 @@ function App() {
         <main className="container mx-auto px-4 py-8">
           <Routes>
             <Route path="/" element={<CharacterList />} />
-            <Route path="/housamovn" element={<AdminPanel />} />
+            <Route path="/admin" element={<AdminPanel />} />
             <Route path="/characters/:id" element={<CharacterDetail />} />
           </Routes>
         </main>
