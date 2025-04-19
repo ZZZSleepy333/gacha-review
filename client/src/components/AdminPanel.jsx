@@ -710,7 +710,7 @@ const AdminPage = () => {
                           Tầm đánh
                         </label>
                         <select
-                          name="csType"
+                          name="chargeSkill.csType"
                           value={formData.chargeSkill.csType}
                           onChange={handleChange}
                           className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
