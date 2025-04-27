@@ -1159,8 +1159,9 @@ const AdminPage = () => {
                 <button
                   onClick={handleCrawl}
                   className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  disabled={isLoading}
                 >
-                  Crawl nhân vật mới
+                  {isLoading ? "Đang crawl..." : "Crawl nhân vật mới"}
                 </button>
               </div>
 
@@ -1222,18 +1223,7 @@ const AdminPage = () => {
                       >
                         Tags
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Rate Up
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Secondary Rate Up
-                      </th>
+
                       <th
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -1243,8 +1233,11 @@ const AdminPage = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {currentItems.length > 0 ? (
-                      currentItems.map((character) => (
+                    {availableCharacters.length > 0 ? (
+                      availableCharacters
+                        .filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                        .slice(indexOfFirstItem, indexOfLastItem)
+                        .map((character) => (
                         <tr key={character._id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <img
@@ -1277,50 +1270,7 @@ const AdminPage = () => {
                               className="text-sm border border-gray-300 rounded px-2 py-1 w-full"
                             />
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <select
-                              value={character.rateUp}
-                              onChange={(e) =>
-                                handleAvailableChange(
-                                  character._id,
-                                  "rateUp",
-                                  e.target.value === "true"
-                                )
-                              }
-                              className="text-sm border border-gray-300 rounded px-2 py-1"
-                            >
-                              {rateUpOptions.map((option) => (
-                                <option
-                                  key={option.value.toString()}
-                                  value={option.value.toString()}
-                                >
-                                  {option.label}
-                                </option>
-                              ))}
-                            </select>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <select
-                              value={character.secondaryRateUp}
-                              onChange={(e) =>
-                                handleAvailableChange(
-                                  character._id,
-                                  "secondaryRateUp",
-                                  e.target.value === "true"
-                                )
-                              }
-                              className="text-sm border border-gray-300 rounded px-2 py-1"
-                            >
-                              {rateUpOptions.map((option) => (
-                                <option
-                                  key={option.value.toString()}
-                                  value={option.value.toString()}
-                                >
-                                  {option.label}
-                                </option>
-                              ))}
-                            </select>
-                          </td>
+
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <button
                               onClick={() => handleDelete(character._id)}
@@ -1334,11 +1284,14 @@ const AdminPage = () => {
                     ) : (
                       <tr>
                         <td
-                          colSpan="7"
+                          colSpan="5"
                           className="px-6 py-4 text-center text-sm text-gray-500"
                         >
-                          Không có nhân vật nào. Hãy nhấn nút "Crawl nhân vật
-                          mới" để bắt đầu.
+                          {isLoading ? (
+                            "Đang tải dữ liệu..."
+                          ) : (
+                            "Không có nhân vật nào. Hãy nhấn nút 'Crawl nhân vật mới' để bắt đầu."
+                          )}
                         </td>
                       </tr>
                     )}
@@ -1349,9 +1302,7 @@ const AdminPage = () => {
               {/* Phân trang */}
               <div className="flex justify-between items-center mt-6">
                 <div className="text-sm text-gray-700">
-                  Hiển thị {indexOfFirstItem + 1} đến{" "}
-                  {Math.min(indexOfLastItem, availableCharacters.length)} trong
-                  tổng số {availableCharacters.length} nhân vật
+                  Hiển thị {availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length > 0 ? indexOfFirstItem + 1 : 0} đến {Math.min(indexOfLastItem, availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length)} trong tổng số {availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length} nhân vật
                 </div>
                 <div className="flex space-x-2">
                   <button
@@ -1366,33 +1317,108 @@ const AdminPage = () => {
                     Trước
                   </button>
                   <div className="flex items-center space-x-1">
-                    {Array.from({
-                      length: Math.ceil(
-                        availableCharacters.length / itemsPerPage
-                      ),
-                    }).map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentPage(index + 1)}
-                        className={`px-3 py-1 rounded ${
-                          currentPage === index + 1
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                        }`}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
+                    {(() => {
+                      const filteredChars = availableCharacters.filter(char => 
+                        char.name.toLowerCase().includes(searchTerm.toLowerCase())
+                      );
+                      const totalPages = Math.ceil(filteredChars.length / itemsPerPage);
+                      const pageButtons = [];
+                      
+                      // Luôn hiển thị trang đầu tiên
+                      if (totalPages > 0) {
+                        pageButtons.push(
+                          <button
+                            key={1}
+                            onClick={() => setCurrentPage(1)}
+                            className={`px-3 py-1 rounded ${
+                              currentPage === 1
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                          >
+                            1
+                          </button>
+                        );
+                      }
+                      
+                      // Hiển thị dấu "..." nếu trang hiện tại > 3
+                      if (currentPage > 3) {
+                        pageButtons.push(
+                          <span key="ellipsis1" className="px-2">...</span>
+                        );
+                      }
+                      
+                      // Hiển thị trang trước trang hiện tại nếu > 1
+                      if (currentPage > 2) {
+                        pageButtons.push(
+                          <button
+                            key={currentPage - 1}
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          >
+                            {currentPage - 1}
+                          </button>
+                        );
+                      }
+                      
+                      // Hiển thị trang hiện tại nếu không phải trang đầu tiên hoặc cuối cùng
+                      if (currentPage !== 1 && currentPage !== totalPages) {
+                        pageButtons.push(
+                          <button
+                            key={currentPage}
+                            onClick={() => setCurrentPage(currentPage)}
+                            className="px-3 py-1 rounded bg-blue-600 text-white"
+                          >
+                            {currentPage}
+                          </button>
+                        );
+                      }
+                      
+                      // Hiển thị trang sau trang hiện tại nếu < totalPages
+                      if (currentPage < totalPages - 1) {
+                        pageButtons.push(
+                          <button
+                            key={currentPage + 1}
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          >
+                            {currentPage + 1}
+                          </button>
+                        );
+                      }
+                      
+                      // Hiển thị dấu "..." nếu trang hiện tại < totalPages - 2
+                      if (currentPage < totalPages - 2) {
+                        pageButtons.push(
+                          <span key="ellipsis2" className="px-2">...</span>
+                        );
+                      }
+                      
+                      // Luôn hiển thị trang cuối cùng nếu có nhiều hơn 1 trang
+                      if (totalPages > 1) {
+                        pageButtons.push(
+                          <button
+                            key={totalPages}
+                            onClick={() => setCurrentPage(totalPages)}
+                            className={`px-3 py-1 rounded ${
+                              currentPage === totalPages
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                          >
+                            {totalPages}
+                          </button>
+                        );
+                      }
+                      
+                      return pageButtons;
+                    })()}
                   </div>
                   <button
                     onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={
-                      currentPage ===
-                      Math.ceil(availableCharacters.length / itemsPerPage)
-                    }
+                    disabled={currentPage === Math.ceil(availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length / itemsPerPage)}
                     className={`px-3 py-1 rounded ${
-                      currentPage ===
-                      Math.ceil(availableCharacters.length / itemsPerPage)
+                      currentPage === Math.ceil(availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length / itemsPerPage)
                         ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                         : "bg-blue-600 text-white hover:bg-blue-700"
                     }`}
@@ -1407,6 +1433,7 @@ const AdminPage = () => {
                 <button
                   onClick={handleSaveAvailable}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  disabled={isLoading}
                 >
                   Lưu thay đổi
                 </button>
