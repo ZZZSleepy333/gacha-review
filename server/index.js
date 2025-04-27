@@ -2,10 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cheerio = require("cheerio");
+const axios = require("axios"); // Thêm dòng này
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 const corsOptions = {
   origin: ["https://gacha-review-2.vercel.app", "http://localhost:3000"],
@@ -17,6 +20,53 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
+
+const LimitedKeywords = [
+  "sol",
+  "orgus",
+  "gordon",
+  "nekros",
+  "fafnir",
+  "claus",
+  "jormungandr",
+  "triton",
+  "jinn",
+  "dagon",
+  "israfil",
+  "hastur",
+  "hei long yi quan",
+  "willie wildcat",
+  "∞",
+  "kyoma",
+  "curren",
+  "kirito",
+  "bigfoot",
+  "quantum",
+  "masashi",
+  "beowulf",
+  "gargoyle",
+  "jack",
+];
+
+const WelfareKeywords = [
+  "gullin",
+  "arach",
+  "astar",
+  "hero",
+  "yamasachihiko",
+  "oguchi",
+  "goro",
+  "inaba",
+  "reprobus",
+  "kumano",
+  "yig",
+  "yule",
+  "sitri",
+  "benten",
+  "zao",
+  "kiji",
+  "agyo",
+];
 
 const characterSchema = new mongoose.Schema(
   {
@@ -273,6 +323,116 @@ app.get("/api/characters/:id", async (req, res) => {
 // app.delete("/api/characters/:id", adminAuth, async (req, res) => {
 //   /* ... */
 // });
+const availableSchema = new mongoose.Schema({
+  rarity: { type: Number, required: true },
+  image: { type: String, required: true },
+  name: { type: String, required: true },
 
+  tags: { type: String },
+});
+
+const Available = mongoose.model("Available", availableSchema);
+
+// API endpoint để crawl và lưu dữ liệu
+const crawlCharacters = async () => {
+  try {
+    const url = "https://housamo-skill.netlify.app/charas/"; // Thay đổi URL nếu cần
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+    const characters = [];
+
+    $("#chara-list li").each((_, element) => {
+      const $el = $(element);
+      const name = $el.find("a").text().trim();
+      const rarity = parseInt($el.attr("data-rarity"), 10);
+      const image = $el.find("img").attr("src");
+
+      // Xử lý tags
+      let tags = "";
+      if (
+        LimitedKeywords &&
+        LimitedKeywords.some((keyword) =>
+          name.toLowerCase().includes(keyword)
+        ) &&
+        name.includes("Standard")
+      )
+        tags = "Limited";
+      else if (
+        WelfareKeywords &&
+        WelfareKeywords.some((keyword) =>
+          name.toLowerCase().includes(keyword)
+        ) &&
+        name.includes("Standard")
+      )
+        tags = "Welfare";
+      else if (name.includes("Standard")) tags = "Standard";
+      else if (!name.includes("(")) tags = "New";
+      else tags = "Event Limited";
+
+      if (!name.includes("Protagonist")) {
+        characters.push({
+          name,
+          rarity,
+          image,
+          tags,
+        });
+      }
+    });
+
+    return characters;
+  } catch (error) {
+    console.error("❌ Lỗi khi crawl dữ liệu:", error);
+    return [];
+  }
+};
+
+app.get("/api/crawl", async (req, res) => {
+  try {
+    const characters = await crawlCharacters();
+    
+    // Thêm dữ liệu mới
+    for (const character of characters) {
+      await Available.findOneAndUpdate(
+        { name: character.name, rarity: character.rarity },
+        character,
+        { upsert: true, new: true }
+      );
+    }
+    
+    const availableCharacters = await Available.find();
+    res.json(availableCharacters);
+  } catch (error) {
+    console.error("❌ Lỗi khi crawl hoặc lưu dữ liệu:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+app.get("/api/available", async (req, res) => {
+  try {
+    const availableCharacters = await Available.find();
+    res.json(availableCharacters);
+  } catch (error) {
+    console.error("❌ Lỗi khi lấy danh sách nhân vật:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+// API để cập nhật nhân vật có sẵn
+app.put("/api/available", async (req, res) => {
+  try {
+    const { characters } = req.body;
+
+    for (const character of characters) {
+      await Available.findByIdAndUpdate(character._id, character, {
+        new: true,
+      });
+    }
+
+    res.json({ message: "Cập nhật thành công" });
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật nhân vật:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

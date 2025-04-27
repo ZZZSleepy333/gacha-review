@@ -32,6 +32,11 @@ const AdminPage = () => {
     "Weapon Changer",
     "HP Decrease",
   ];
+
+  const rateUpOptions = [
+    { value: true, label: "Rate Up" },
+    { value: false, label: "Normal" },
+  ];
   const weaponTypeOptions = [
     "Slash",
     "Long Slash",
@@ -114,6 +119,9 @@ const AdminPage = () => {
   ];
 
   const [characters, setCharacters] = useState([]);
+  const [availableCharacters, setAvailableCharacters] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const [formData, setFormData] = useState({
     title: "",
     name: "",
@@ -158,6 +166,45 @@ const AdminPage = () => {
   const closeSnackbar = () => {
     setSnackbar({ ...snackbar, show: false });
   };
+  const handleCrawl = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/crawl`);
+      setAvailableCharacters(response.data);
+      showSnackbar("Crawl dữ liệu thành công!");
+    } catch (err) {
+      console.error("Crawl error:", err);
+      showSnackbar("Lỗi khi crawl dữ liệu: " + (err.response?.status || err.message));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAvailableChange = (id, field, value) => {
+    setAvailableCharacters((prev) =>
+      prev.map((char) => (char._id === id ? { ...char, [field]: value } : char))
+    );
+  };
+
+  const handleSaveAvailable = async () => {
+    try {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/available`, {
+        characters: availableCharacters,
+      });
+      showSnackbar("Changes saved successfully!");
+    } catch (err) {
+      console.error("Save error:", err);
+      showSnackbar("Error saving changes!");
+    }
+  };
+
+  // Tính toán phân trang
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = availableCharacters.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   // Fetch characters
   useEffect(() => {
@@ -175,6 +222,24 @@ const AdminPage = () => {
     };
     fetchCharacters();
   }, []);
+
+  // Fetch available characters when banner tab is active
+  useEffect(() => {
+    const fetchAvailableCharacters = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/available`
+        );
+        setAvailableCharacters(res.data);
+      } catch (err) {
+        console.error("Error fetching available characters:", err);
+      }
+    };
+
+    if (activeTab === "banner") {
+      fetchAvailableCharacters();
+    }
+  }, [activeTab]);
 
   // Filter characters based on search term
   const filteredCharacters = characters.filter(
@@ -362,6 +427,16 @@ const AdminPage = () => {
               }`}
             >
               Quản lý nhân vật
+            </button>
+            <button
+              onClick={() => setActiveTab("banner")}
+              className={`px-4 py-2 rounded-md ${
+                activeTab === "banner"
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              Banner Character Manage
             </button>
           </div>
         </div>
@@ -1069,6 +1144,273 @@ const AdminPage = () => {
                   </table>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Manage Banner's Character */}
+        {activeTab === "banner" && (
+          <div className="bg-white shadow rounded-lg overflow-hidden">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Quản lý nhân vật Banner
+                </h2>
+                <button
+                  onClick={handleCrawl}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                >
+                  Crawl nhân vật mới
+                </button>
+              </div>
+
+              {/* Thanh tìm kiếm */}
+              <div className="mb-6">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm theo tên nhân vật..."
+                    className="w-full p-3 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <div className="absolute left-3 top-3 text-gray-400">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Danh sách nhân vật */}
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Hình ảnh
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Tên
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Độ hiếm
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Tags
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Rate Up
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Secondary Rate Up
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {currentItems.length > 0 ? (
+                      currentItems.map((character) => (
+                        <tr key={character._id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <img
+                              src={character.image}
+                              alt={character.name}
+                              className="h-12 w-12 rounded-full object-cover"
+                            />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">
+                              {character.name}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">
+                              {character.rarity} ★
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <input
+                              type="text"
+                              value={character.tags || ""}
+                              onChange={(e) =>
+                                handleAvailableChange(
+                                  character._id,
+                                  "tags",
+                                  e.target.value
+                                )
+                              }
+                              className="text-sm border border-gray-300 rounded px-2 py-1 w-full"
+                            />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <select
+                              value={character.rateUp}
+                              onChange={(e) =>
+                                handleAvailableChange(
+                                  character._id,
+                                  "rateUp",
+                                  e.target.value === "true"
+                                )
+                              }
+                              className="text-sm border border-gray-300 rounded px-2 py-1"
+                            >
+                              {rateUpOptions.map((option) => (
+                                <option
+                                  key={option.value.toString()}
+                                  value={option.value.toString()}
+                                >
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <select
+                              value={character.secondaryRateUp}
+                              onChange={(e) =>
+                                handleAvailableChange(
+                                  character._id,
+                                  "secondaryRateUp",
+                                  e.target.value === "true"
+                                )
+                              }
+                              className="text-sm border border-gray-300 rounded px-2 py-1"
+                            >
+                              {rateUpOptions.map((option) => (
+                                <option
+                                  key={option.value.toString()}
+                                  value={option.value.toString()}
+                                >
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button
+                              onClick={() => handleDelete(character._id)}
+                              className="text-red-600 hover:text-red-900 mr-2"
+                            >
+                              Xóa
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="7"
+                          className="px-6 py-4 text-center text-sm text-gray-500"
+                        >
+                          Không có nhân vật nào. Hãy nhấn nút "Crawl nhân vật
+                          mới" để bắt đầu.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Phân trang */}
+              <div className="flex justify-between items-center mt-6">
+                <div className="text-sm text-gray-700">
+                  Hiển thị {indexOfFirstItem + 1} đến{" "}
+                  {Math.min(indexOfLastItem, availableCharacters.length)} trong
+                  tổng số {availableCharacters.length} nhân vật
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === 1
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
+                    }`}
+                  >
+                    Trước
+                  </button>
+                  <div className="flex items-center space-x-1">
+                    {Array.from({
+                      length: Math.ceil(
+                        availableCharacters.length / itemsPerPage
+                      ),
+                    }).map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentPage(index + 1)}
+                        className={`px-3 py-1 rounded ${
+                          currentPage === index + 1
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={
+                      currentPage ===
+                      Math.ceil(availableCharacters.length / itemsPerPage)
+                    }
+                    className={`px-3 py-1 rounded ${
+                      currentPage ===
+                      Math.ceil(availableCharacters.length / itemsPerPage)
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
+                    }`}
+                  >
+                    Tiếp
+                  </button>
+                </div>
+              </div>
+
+              {/* Nút lưu thay đổi */}
+              <div className="mt-6 text-right">
+                <button
+                  onClick={handleSaveAvailable}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Lưu thay đổi
+                </button>
+              </div>
             </div>
           </div>
         )}
