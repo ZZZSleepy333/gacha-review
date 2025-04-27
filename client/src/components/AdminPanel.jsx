@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Snackbar from "./Snackbar";
-
-import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css";
+import BannerManagement from "./BannerManagement";
+import CharacterForm from "./CharacterForm";
+import CharacterManagement from "./CharacterManagement";
+import GachaComponents from "./GachaComponents"; // Thêm import GachaComponents
 
 const AdminPage = () => {
   // Options for dropdowns
@@ -169,12 +170,16 @@ const AdminPage = () => {
   const handleCrawl = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/crawl`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/crawl`
+      );
       setAvailableCharacters(response.data);
       showSnackbar("Crawl dữ liệu thành công!");
     } catch (err) {
       console.error("Crawl error:", err);
-      showSnackbar("Lỗi khi crawl dữ liệu: " + (err.response?.status || err.message));
+      showSnackbar(
+        "Lỗi khi crawl dữ liệu: " + (err.response?.status || err.message)
+      );
     } finally {
       setIsLoading(false);
     }
@@ -214,6 +219,7 @@ const AdminPage = () => {
           `${process.env.REACT_APP_API_URL}/api/characters`
         );
         setCharacters(res.data);
+        console.log(res.data);
       } catch (err) {
         console.error("Error fetching characters:", err);
       } finally {
@@ -413,7 +419,7 @@ const AdminPage = () => {
                   : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
             >
-              {formData._id ? "Edit Character" : "Create New"}
+              {formData._id ? "Chỉnh sửa Review" : "Tạo Review"}
             </button>
             <button
               onClick={() => {
@@ -426,7 +432,7 @@ const AdminPage = () => {
                   : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
             >
-              Quản lý nhân vật
+              Quản lý Review
             </button>
             <button
               onClick={() => setActiveTab("banner")}
@@ -436,7 +442,17 @@ const AdminPage = () => {
                   : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
             >
-              Banner Character Manage
+              Quản lý nhân vật
+            </button>
+            <button
+              onClick={() => setActiveTab("gacha")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === "gacha"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              Quản lý Gacha
             </button>
           </div>
         </div>
@@ -445,1002 +461,57 @@ const AdminPage = () => {
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {/* Create/Edit Form */}
         {activeTab === "create" && (
-          <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
-            <div className="p-6">
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                  {/* Left Column */}
-                  <div className="space-y-6">
-                    {/* Basic Info */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Thông tin cơ bản
-                      </h3>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Danh hiệu
-                        </label>
-                        <input
-                          type="text"
-                          name="title"
-                          value={formData.title}
-                          onChange={handleChange}
-                          className="border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Tên nhân vật
-                        </label>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          className="border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Hình ảnh
-                        </label>
-                        <input
-                          type="url"
-                          name="image"
-                          value={formData.image}
-                          onChange={handleChange}
-                          className="border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        />
-                        {formData.image && (
-                          <div className="mt-2">
-                            <img
-                              src={formData.image}
-                              alt="Preview"
-                              className="h-32 object-cover rounded border"
-                              onError={(e) =>
-                                (e.target.src = "/placeholder-character.jpg")
-                              }
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Attributes */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Các thông tin khác
-                      </h3>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Độ hiếm
-                        </label>
-                        <select
-                          name="rarity"
-                          value={formData.rarity}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {rarityOptions.map((rarity) => (
-                            <option key={rarity} value={rarity}>
-                              {rarity} ★
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Loại nhân vật
-                        </label>
-                        <select
-                          name="characterType"
-                          value={formData.characterType}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {characterTypesOptions.map((chrType) => (
-                            <option key={chrType} value={chrType}>
-                              {chrType}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Hệ nguyên tố
-                        </label>
-                        <select
-                          name="attribute"
-                          value={formData.attribute}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {attributeOptions.map((attr) => (
-                            <option key={attr} value={attr}>
-                              {attr}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Tầm đánh
-                        </label>
-                        <select
-                          name="weaponType"
-                          value={formData.weaponType}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {weaponTypeOptions.map((weapon) => (
-                            <option key={weapon} value={weapon}>
-                              {weapon}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Học viện
-                        </label>
-                        <select
-                          name="school"
-                          value={formData.school}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {schoolOptions.map((school) => (
-                            <option key={school} value={school}>
-                              {school}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Guild
-                        </label>
-                        <select
-                          name="guild"
-                          value={formData.guild}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {guildOptions.map((guild) => (
-                            <option key={guild} value={guild}>
-                              {guild}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Quan hệ
-                        </label>
-                        <select
-                          name="affiliation"
-                          value={formData.affiliation}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {affiliationOptions.map((aff) => (
-                            <option key={aff} value={aff}>
-                              {aff}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Roles */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Vai trò nhân vật
-                      </h3>
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {formData.roles.map((role) => (
-                          <span
-                            key={role}
-                            className="inline-flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm"
-                          >
-                            {role}
-                            <button
-                              type="button"
-                              onClick={() => removeRole(role)}
-                              className="ml-2 text-blue-600 hover:text-blue-800"
-                            >
-                              ×
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Thêm vai trò
-                        </label>
-                        <select
-                          onChange={(e) => handleRoleSelect(e.target.value)}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          value=""
-                        >
-                          <option value="">Select a role...</option>
-                          {roleOptions
-                            .filter((role) => !formData.roles.includes(role))
-                            .map((role) => (
-                              <option key={role} value={role}>
-                                {role}
-                              </option>
-                            ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column */}
-                  <div className="space-y-6">
-                    {/* Stats */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Stats
-                      </h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            HP ở Level 70
-                          </label>
-                          <input
-                            type="number"
-                            name="maxHp"
-                            value={formData.maxHp}
-                            onChange={handleChange}
-                            className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            ATK ở level 70
-                          </label>
-                          <input
-                            type="number"
-                            name="maxAttack"
-                            value={formData.maxAttack}
-                            onChange={handleChange}
-                            className="border  p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Lồng tiếng
-                          </label>
-                          <input
-                            type="text"
-                            name="voiceActors"
-                            value={formData.voiceActors}
-                            onChange={handleChange}
-                            className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Minh hoạ
-                          </label>
-                          <input
-                            type="text"
-                            name="illustrators"
-                            value={formData.illustrators}
-                            onChange={handleChange}
-                            className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Charge Skill */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                        Charge Skill
-                      </h3>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Tên kỹ năng
-                        </label>
-                        <input
-                          type="text"
-                          name="chargeSkill.chargeSkillName"
-                          value={formData.chargeSkill.chargeSkillName}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Tầm đánh
-                        </label>
-                        <select
-                          name="chargeSkill.csType"
-                          value={formData.chargeSkill.csType}
-                          onChange={handleChange}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        >
-                          {weaponTypeOptions.map((weapon) => (
-                            <option key={weapon} value={weapon}>
-                              {weapon}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Mô tả
-                        </label>
-                        <textarea
-                          name="chargeSkill.chargeSkillDescription"
-                          value={formData.chargeSkill.chargeSkillDescription}
-                          onChange={handleChange}
-                          rows={3}
-                          className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4  rounded-lg ">
-                  <h3 className="text-lg font-medium text-gray-900  pb-2">
-                    Review chi tiết
-                  </h3>
-                  <div className=" ">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tier
-                    </label>
-                    <div className="flex flex-wrap gap-3">
-                      {ratingOptions.map((grade) => (
-                        <label key={grade} className="inline-flex items-center">
-                          <input
-                            type="radio"
-                            name="adminReview"
-                            value={grade}
-                            checked={formData.adminReview === grade}
-                            onChange={() =>
-                              setFormData({
-                                ...formData,
-                                adminReview: grade,
-                              })
-                            }
-                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                          />
-                          <span
-                            className={`ml-2 px-3 py-1 rounded-full text-xs font-semibold ${
-                              grade === "S+"
-                                ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-                                : grade === "S"
-                                ? "bg-red-600 text-white"
-                                : grade === "A+"
-                                ? "bg-orange-500 text-white"
-                                : grade === "A"
-                                ? "bg-yellow-500 text-white"
-                                : grade === "B"
-                                ? "bg-green-500 text-white"
-                                : grade === "C"
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-500 text-white"
-                            }`}
-                          >
-                            {grade}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Điểm nổi bật
-                    </label>
-                    <textarea
-                      name="strongPoints"
-                      value={formData.strongPoints}
-                      onChange={handleChange}
-                      rows={3}
-                      className="p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Điểm lưu ý
-                    </label>
-                    <textarea
-                      name="weakPoints"
-                      value={formData.weakPoints}
-                      onChange={handleChange}
-                      rows={3}
-                      className="p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Đánh giá tổng quan
-                    </label>
-                    <ReactQuill
-                      theme="snow"
-                      value={formData.finalReview}
-                      onChange={(value) =>
-                        setFormData((prev) => ({ ...prev, finalReview: value }))
-                      }
-                      className="custom-quill"
-                    />
-                  </div>
-                </div>
-
-                {/* Form Actions */}
-                <div className="flex justify-end space-x-3 pt-4 border-t">
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    Reset
-                  </button>
-                  <button
-                    type="submit"
-                    className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center ${
-                      isLoading ? "opacity-75 cursor-not-allowed" : ""
-                    }`}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <>
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        {formData._id ? "Cập nhật..." : "Đang tạo..."}
-                      </>
-                    ) : formData._id ? (
-                      "Cập nhật nhân vật"
-                    ) : (
-                      "Tạo nhân vật"
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+          <CharacterForm
+            formData={formData}
+            setFormData={setFormData}
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            handleRoleSelect={handleRoleSelect}
+            removeRole={removeRole}
+            isLoading={isLoading}
+            rarityOptions={rarityOptions}
+            attributeOptions={attributeOptions}
+            roleOptions={roleOptions}
+            weaponTypeOptions={weaponTypeOptions}
+            schoolOptions={schoolOptions}
+            guildOptions={guildOptions}
+            affiliationOptions={affiliationOptions}
+            ratingOptions={ratingOptions}
+            characterTypesOptions={characterTypesOptions}
+          />
         )}
 
         {/* Manage Characters */}
         {activeTab === "manage" && (
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            <div className="p-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  Quản lý nhân vật
-                </h2>
-                <div className="relative w-full sm:w-64">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search characters..."
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {isLoading ? (
-                <div className="flex justify-center items-center h-64">
-                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                </div>
-              ) : filteredCharacters.length === 0 ? (
-                <div className="text-center py-12">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">
-                    Không tìm thấy nhân vật
-                  </h3>
-
-                  <div className="mt-6">
-                    <button
-                      onClick={() => setActiveTab("create")}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      <svg
-                        className="-ml-1 mr-2 h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                        />
-                      </svg>
-                      Thêm nhân vật mới
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Nhân vật
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Độ hiếm
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Tier
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Hành động
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredCharacters.map((character) => (
-                        <tr key={character._id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="flex-shrink-0 h-10 w-10">
-                                <img
-                                  className="h-10 w-10 rounded-full object-cover"
-                                  src={
-                                    character.image ||
-                                    "/placeholder-character.jpg"
-                                  }
-                                  alt={character.name}
-                                />
-                              </div>
-                              <div className="ml-4">
-                                <div className=" text-sm font-medium text-gray-900">
-                                  {character.name}
-                                </div>
-                                <div className=" text-sm text-gray-500">
-                                  {character.title}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex">
-                              {[...Array(character.rarity)].map((_, i) => (
-                                <svg
-                                  key={i}
-                                  className="h-5 w-5 text-yellow-400"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                              ))}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                character.adminReview === "S+"
-                                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-                                  : character.adminReview === "S"
-                                  ? "bg-red-600 text-white"
-                                  : character.adminReview === "A+"
-                                  ? "bg-orange-500 text-white"
-                                  : character.adminReview === "A"
-                                  ? "bg-yellow-500 text-white"
-                                  : character.adminReview === "B"
-                                  ? "bg-green-500 text-white"
-                                  : character.adminReview === "C"
-                                  ? "bg-blue-500 text-white"
-                                  : "bg-gray-500 text-white"
-                              }`}
-                            >
-                              {character.adminReview}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button
-                              onClick={() => handleEdit(character)}
-                              className="text-blue-600 hover:text-blue-900 mr-4"
-                            >
-                              Chỉnh sửa
-                            </button>
-                            <button
-                              onClick={() => handleDelete(character._id)}
-                              className="text-red-600 hover:text-red-900"
-                            >
-                              Xoá
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          </div>
+          <CharacterManagement
+            characters={characters}
+            setCharacters={setCharacters}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            setActiveTab={setActiveTab}
+            isLoading={isLoading}
+            showSnackbar={showSnackbar}
+          />
         )}
 
         {/* Manage Banner's Character */}
         {activeTab === "banner" && (
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  Quản lý nhân vật Banner
-                </h2>
-                <button
-                  onClick={handleCrawl}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Đang crawl..." : "Crawl nhân vật mới"}
-                </button>
-              </div>
-
-              {/* Thanh tìm kiếm */}
-              <div className="mb-6">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Tìm kiếm theo tên nhân vật..."
-                    className="w-full p-3 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  <div className="absolute left-3 top-3 text-gray-400">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Danh sách nhân vật */}
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Hình ảnh
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Tên
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Độ hiếm
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Tags
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Thao tác
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {availableCharacters.length > 0 ? (
-                      availableCharacters
-                        .filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                        .slice(indexOfFirstItem, indexOfLastItem)
-                        .map((character) => (
-                        <tr key={character._id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <img
-                              src={character.image}
-                              alt={character.name}
-                              className="h-12 w-12 rounded-full object-cover"
-                            />
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">
-                              {character.name}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">
-                              {character.rarity} ★
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <input
-                              type="text"
-                              value={character.tags || ""}
-                              onChange={(e) =>
-                                handleAvailableChange(
-                                  character._id,
-                                  "tags",
-                                  e.target.value
-                                )
-                              }
-                              className="text-sm border border-gray-300 rounded px-2 py-1 w-full"
-                            />
-                          </td>
-
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button
-                              onClick={() => handleDelete(character._id)}
-                              className="text-red-600 hover:text-red-900 mr-2"
-                            >
-                              Xóa
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="5"
-                          className="px-6 py-4 text-center text-sm text-gray-500"
-                        >
-                          {isLoading ? (
-                            "Đang tải dữ liệu..."
-                          ) : (
-                            "Không có nhân vật nào. Hãy nhấn nút 'Crawl nhân vật mới' để bắt đầu."
-                          )}
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Phân trang */}
-              <div className="flex justify-between items-center mt-6">
-                <div className="text-sm text-gray-700">
-                  Hiển thị {availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length > 0 ? indexOfFirstItem + 1 : 0} đến {Math.min(indexOfLastItem, availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length)} trong tổng số {availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length} nhân vật
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded ${
-                      currentPage === 1
-                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                        : "bg-blue-600 text-white hover:bg-blue-700"
-                    }`}
-                  >
-                    Trước
-                  </button>
-                  <div className="flex items-center space-x-1">
-                    {(() => {
-                      const filteredChars = availableCharacters.filter(char => 
-                        char.name.toLowerCase().includes(searchTerm.toLowerCase())
-                      );
-                      const totalPages = Math.ceil(filteredChars.length / itemsPerPage);
-                      const pageButtons = [];
-                      
-                      // Luôn hiển thị trang đầu tiên
-                      if (totalPages > 0) {
-                        pageButtons.push(
-                          <button
-                            key={1}
-                            onClick={() => setCurrentPage(1)}
-                            className={`px-3 py-1 rounded ${
-                              currentPage === 1
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                            }`}
-                          >
-                            1
-                          </button>
-                        );
-                      }
-                      
-                      // Hiển thị dấu "..." nếu trang hiện tại > 3
-                      if (currentPage > 3) {
-                        pageButtons.push(
-                          <span key="ellipsis1" className="px-2">...</span>
-                        );
-                      }
-                      
-                      // Hiển thị trang trước trang hiện tại nếu > 1
-                      if (currentPage > 2) {
-                        pageButtons.push(
-                          <button
-                            key={currentPage - 1}
-                            onClick={() => setCurrentPage(currentPage - 1)}
-                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          >
-                            {currentPage - 1}
-                          </button>
-                        );
-                      }
-                      
-                      // Hiển thị trang hiện tại nếu không phải trang đầu tiên hoặc cuối cùng
-                      if (currentPage !== 1 && currentPage !== totalPages) {
-                        pageButtons.push(
-                          <button
-                            key={currentPage}
-                            onClick={() => setCurrentPage(currentPage)}
-                            className="px-3 py-1 rounded bg-blue-600 text-white"
-                          >
-                            {currentPage}
-                          </button>
-                        );
-                      }
-                      
-                      // Hiển thị trang sau trang hiện tại nếu < totalPages
-                      if (currentPage < totalPages - 1) {
-                        pageButtons.push(
-                          <button
-                            key={currentPage + 1}
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          >
-                            {currentPage + 1}
-                          </button>
-                        );
-                      }
-                      
-                      // Hiển thị dấu "..." nếu trang hiện tại < totalPages - 2
-                      if (currentPage < totalPages - 2) {
-                        pageButtons.push(
-                          <span key="ellipsis2" className="px-2">...</span>
-                        );
-                      }
-                      
-                      // Luôn hiển thị trang cuối cùng nếu có nhiều hơn 1 trang
-                      if (totalPages > 1) {
-                        pageButtons.push(
-                          <button
-                            key={totalPages}
-                            onClick={() => setCurrentPage(totalPages)}
-                            className={`px-3 py-1 rounded ${
-                              currentPage === totalPages
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                            }`}
-                          >
-                            {totalPages}
-                          </button>
-                        );
-                      }
-                      
-                      return pageButtons;
-                    })()}
-                  </div>
-                  <button
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={currentPage === Math.ceil(availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length / itemsPerPage)}
-                    className={`px-3 py-1 rounded ${
-                      currentPage === Math.ceil(availableCharacters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())).length / itemsPerPage)
-                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                        : "bg-blue-600 text-white hover:bg-blue-700"
-                    }`}
-                  >
-                    Tiếp
-                  </button>
-                </div>
-              </div>
-
-              {/* Nút lưu thay đổi */}
-              <div className="mt-6 text-right">
-                <button
-                  onClick={handleSaveAvailable}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                  disabled={isLoading}
-                >
-                  Lưu thay đổi
-                </button>
-              </div>
-            </div>
-          </div>
+          <BannerManagement
+            availableCharacters={availableCharacters}
+            setAvailableCharacters={setAvailableCharacters}
+            showSnackbar={showSnackbar}
+          />
         )}
+        {activeTab === "gacha" && (
+          <GachaComponents showSnackbar={showSnackbar} />
+        )}
+
+        {/* Snackbar */}
+        <Snackbar
+          message={snackbar.message}
+          show={snackbar.show}
+          onClose={closeSnackbar}
+        />
       </main>
     </div>
   );

@@ -434,5 +434,114 @@ app.put("/api/available", async (req, res) => {
     res.status(500).json({ error: "Lỗi server" });
   }
 });
+// Schema cho Banner
+const bannerSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  image: { type: String, required: true },
+  characters: [{
+    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Available' },
+    name: { type: String },
+    image: { type: String },
+    rarity: { type: Number },
+    rateUpStatus: { 
+      type: String, 
+      enum: ['normal', 'rateup-1', 'rateup-2'],
+      default: 'normal'
+    }
+  }]
+}, { timestamps: true });
+
+const Banner = mongoose.model("Banner", bannerSchema);
+
+// API lấy danh sách banners
+app.get("/api/banners", async (req, res) => {
+  try {
+    const banners = await Banner.find().sort({ createdAt: -1 });
+    res.json(banners);
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách banners:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+// API lấy chi tiết banner theo ID
+app.get("/api/banners/:id", async (req, res) => {
+  try {
+    const banner = await Banner.findById(req.params.id);
+    if (!banner) {
+      return res.status(404).json({ message: "Không tìm thấy banner" });
+    }
+    res.json(banner);
+  } catch (error) {
+    console.error("Lỗi khi lấy chi tiết banner:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+// API tạo banner mới
+app.post("/api/banners", async (req, res) => {
+  try {
+    const { name, image, characters } = req.body;
+    
+    if (!name || !image) {
+      return res.status(400).json({ message: "Thiếu thông tin banner" });
+    }
+    
+    const newBanner = new Banner({
+      name,
+      image,
+      characters: characters || []
+    });
+    
+    const savedBanner = await newBanner.save();
+    res.status(201).json(savedBanner);
+  } catch (error) {
+    console.error("Lỗi khi tạo banner:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+// API cập nhật banner
+app.put("/api/banners/:id", async (req, res) => {
+  try {
+    const { name, image, characters } = req.body;
+    
+    if (!name || !image) {
+      return res.status(400).json({ message: "Thiếu thông tin banner" });
+    }
+    
+    const updatedBanner = await Banner.findByIdAndUpdate(
+      req.params.id,
+      { name, image, characters },
+      { new: true }
+    );
+    
+    if (!updatedBanner) {
+      return res.status(404).json({ message: "Không tìm thấy banner" });
+    }
+    
+    res.json(updatedBanner);
+  } catch (error) {
+    console.error("Lỗi khi cập nhật banner:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+// API xóa banner
+app.delete("/api/banners/:id", async (req, res) => {
+  try {
+    const deletedBanner = await Banner.findByIdAndDelete(req.params.id);
+    
+    if (!deletedBanner) {
+      return res.status(404).json({ message: "Không tìm thấy banner" });
+    }
+    
+    res.json({ message: "Xóa banner thành công" });
+  } catch (error) {
+    console.error("Lỗi khi xóa banner:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
