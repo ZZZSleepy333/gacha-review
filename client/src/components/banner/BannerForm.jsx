@@ -55,40 +55,6 @@ const BannerForm = ({
           </div>
         </div>
 
-        {/* {selectedCharacters.length > 0 && (
-          <div className="mb-4">
-            <h4 className="text-md font-medium mb-2 text-gray-800 dark:text-white">
-              Nhân vật đã chọn ({selectedCharacters.length})
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
-              {selectedCharacters.map((char) => (
-                <div
-                  key={char._id}
-                  className="border border-gray-200 dark:border-gray-700 rounded-md p-2 flex flex-col items-center"
-                >
-                  <img
-                    src={char.image}
-                    alt={char.name}
-                    className="w-12 h-12 object-cover rounded-full mb-1"
-                  />
-                  <p className="text-xs font-medium text-center text-gray-800 dark:text-white">
-                    {char.name}
-                  </p>
-                  <select
-                    value={char.rateUpStatus}
-                    onChange={(e) => onRateUpChange(char._id, e.target.value)}
-                    className="mt-1 text-xs w-full p-1 border border-gray-300 dark:border-gray-600 rounded dark:bg-gray-800 dark:text-white"
-                  >
-                    <option value="normal">Thường</option>
-                    <option value="rateup">Rate Up</option>
-                    <option value="featured">Featured</option>
-                  </select>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}  */}
-
         <div className="flex justify-end space-x-2">
           <button
             type="button"

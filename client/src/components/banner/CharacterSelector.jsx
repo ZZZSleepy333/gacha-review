@@ -267,13 +267,13 @@ const CharacterSelector = ({
                 let bgColorClass =
                   "border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600/50";
                 if (isSelected) {
-                  if (mappedRateUpStatus === "normal") {
+                  if (rateUpStatus === "normal") {
                     bgColorClass =
                       "border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400";
-                  } else if (mappedRateUpStatus === "rateup-1") {
+                  } else if (rateUpStatus === "rateup-1") {
                     bgColorClass =
                       "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/30 dark:border-yellow-400";
-                  } else if (mappedRateUpStatus === "rateup-2") {
+                  } else if (rateUpStatus === "rateup-2") {
                     bgColorClass =
                       "border-red-500 bg-red-50 dark:bg-red-900/30 dark:border-red-400";
                   }
@@ -324,14 +324,10 @@ const CharacterSelector = ({
                     >
                       <button
                         onClick={(e) => {
-                          handleDirectRateUpChange(
-                            character,
-                            mapRateUpValue("normal"),
-                            e
-                          );
+                          handleDirectRateUpChange(character, "normal", e);
                         }}
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                          isSelected && mappedRateUpStatus === "normal"
+                          isSelected && rateUpStatus === "normal"
                             ? "bg-blue-500 text-white"
                             : "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
                         }`}
@@ -341,14 +337,10 @@ const CharacterSelector = ({
                       </button>
                       <button
                         onClick={(e) => {
-                          handleDirectRateUpChange(
-                            character,
-                            mapRateUpValue("rateup-1"),
-                            e
-                          );
+                          handleDirectRateUpChange(character, "rateup-1", e);
                         }}
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                          isSelected && mappedRateUpStatus === "rateup-1"
+                          isSelected && rateUpStatus === "rateup-1"
                             ? "bg-yellow-500 text-white"
                             : "bg-yellow-200 text-yellow-700 hover:bg-yellow-300 dark:bg-yellow-700/50 dark:text-yellow-300"
                         }`}
@@ -358,14 +350,10 @@ const CharacterSelector = ({
                       </button>
                       <button
                         onClick={(e) => {
-                          handleDirectRateUpChange(
-                            character,
-                            mapRateUpValue("rateup-2"),
-                            e
-                          );
+                          handleDirectRateUpChange(character, "rateup-2", e);
                         }}
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                          isSelected && mappedRateUpStatus === "rateup-2"
+                          isSelected && rateUpStatus === "rateup-2"
                             ? "bg-red-500 text-white"
                             : "bg-red-200 text-red-700 hover:bg-red-300 dark:bg-red-700/50 dark:text-red-300"
                         }`}
