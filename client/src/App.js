@@ -4,6 +4,7 @@ import AdminPanel from "./components/AdminPanel";
 import CharacterDetail from "./components/CharacterDetail";
 import DarkModeToggle from "./components/DarkModeToggle";
 import { DarkModeProvider } from "./contexts/DarkModeContext";
+import GachaSimulator from "./components/GachaSimulator";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
               </Link>
               <div className="flex items-center space-x-6">
                 <DarkModeToggle />
-                {/* <NavLink
+                <NavLink
                   to="/"
                   className={({ isActive }) =>
                     `text-white hover:text-yellow-200 ${
@@ -28,18 +29,18 @@ function App() {
                     }`
                   }
                 >
-                  Home
+                  Review
                 </NavLink>
                 <NavLink
-                  to="/admin"
+                  to="/gacha"
                   className={({ isActive }) =>
                     `text-white hover:text-yellow-200 ${
                       isActive ? "font-bold underline" : ""
                     }`
                   }
                 >
-                  Admin
-                </NavLink> */}
+                  Gacha Simulator
+                </NavLink>
               </div>
             </div>
           </nav>
@@ -50,6 +51,7 @@ function App() {
               <Route path="/" element={<CharacterList />} />
               <Route path="/housamovn" element={<AdminPanel />} />
               <Route path="/characters/:id" element={<CharacterDetail />} />
+              <Route path="/gacha" element={<GachaSimulator />} />
             </Routes>
           </main>
 

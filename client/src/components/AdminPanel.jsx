@@ -413,10 +413,10 @@ const AdminPage = () => {
           <div className="flex space-x-4">
             <button
               onClick={() => setActiveTab("create")}
-              className={`px-4 py-2 rounded-md ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "create"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               {formData._id ? "Chỉnh sửa Review" : "Tạo Review"}
@@ -426,20 +426,20 @@ const AdminPage = () => {
                 setActiveTab("manage");
                 resetForm();
               }}
-              className={`px-4 py-2 rounded-md ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "manage"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               Quản lý Review
             </button>
             <button
               onClick={() => setActiveTab("banner")}
-              className={`px-4 py-2 rounded-md ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "banner"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               Quản lý nhân vật
