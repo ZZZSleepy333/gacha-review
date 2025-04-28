@@ -43,6 +43,12 @@ const GachaSimulator = () => {
     return savedSALevels ? JSON.parse(savedSALevels) : {};
   });
 
+  // Thêm state mới để lưu trữ nhân vật đã quay được
+  const [obtainedCharacters, setObtainedCharacters] = useState(() => {
+    const savedCharacters = localStorage.getItem("gacha_obtained_characters");
+    return savedCharacters ? JSON.parse(savedCharacters) : {};
+  });
+
   // Giá tiền cho mỗi lần quay
   const SINGLE_PULL_COST = 5;
   const MULTI_PULL_COST = 50;
@@ -64,6 +70,17 @@ const GachaSimulator = () => {
   useEffect(() => {
     localStorage.setItem("gacha_stats", JSON.stringify(stats));
   }, [stats]);
+
+  useEffect(() => {
+    localStorage.setItem("gacha_sa_levels", JSON.stringify(characterSALevels));
+  }, [characterSALevels]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "gacha_obtained_characters",
+      JSON.stringify(obtainedCharacters)
+    );
+  }, [obtainedCharacters]);
 
   // Fetch danh sách banner khi component mount
   useEffect(() => {
@@ -341,6 +358,32 @@ const GachaSimulator = () => {
 
       return newSALevels;
     });
+
+    // Cập nhật danh sách nhân vật đã quay được
+    setObtainedCharacters((prev) => {
+      const newObtainedCharacters = { ...prev };
+
+      characters.forEach((char) => {
+        if (char._id.startsWith("random-")) return; // Bỏ qua nhân vật ngẫu nhiên
+
+        // Lưu thông tin nhân vật
+        if (!newObtainedCharacters[char._id]) {
+          newObtainedCharacters[char._id] = {
+            id: char._id,
+            name: char.name,
+            image: char.image,
+            rarity: char.rarity,
+            count: 1,
+            firstObtainedAt: new Date().toISOString(),
+          };
+        } else {
+          // Cập nhật thông tin nếu đã có
+          newObtainedCharacters[char._id].count += 1;
+        }
+      });
+
+      return newObtainedCharacters;
+    });
   };
 
   // Cập nhật thống kê
@@ -381,9 +424,10 @@ const GachaSimulator = () => {
 
   // Xóa lịch sử
   const clearHistory = () => {
-    if (window.confirm("Bạn có chắc muốn xóa lịch sử quay và reset SA.LV?")) {
+    if (window.confirm("Bạn có chắc muốn xóa lịch sử quay")) {
       setHistory([]);
       setCharacterSALevels({});
+      setObtainedCharacters({});
       setStats({
         totalPulls: 0,
         totalCrystals: 0,
@@ -393,6 +437,8 @@ const GachaSimulator = () => {
         rarity3Count: 0,
         featuredCount: 0,
       });
+      setObtainedCharacters({});
+      localStorage.setItem("gacha_obtained_characters", JSON.stringify({}));
     }
   };
 
@@ -985,77 +1031,56 @@ const GachaSimulator = () => {
           {/* Lịch sử quay */}
           <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-4 mb-6">
             <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
-              Lịch sử quay
+              Nhân vật đã quay được
             </h2>
-            {history.length === 0 ? (
+
+            {Object.keys(obtainedCharacters).length === 0 ? (
               <p className="text-gray-500 dark:text-gray-400">
-                Chưa có lịch sử quay nào.
+                Chưa có nhân vật nào.
               </p>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                {Object.entries(characterSALevels)
-                  .map(([charId, saLevel]) => {
-                    // Tìm thông tin nhân vật từ lịch sử
-                    const allResults = history.flatMap(
-                      (entry) => entry.results
-                    );
-                    const character = allResults.find(
-                      (char) => char._id === charId
-                    );
-
-                    // Nếu không tìm thấy nhân vật hoặc là nhân vật ngẫu nhiên, bỏ qua
-                    if (!character || charId.startsWith("random-")) return null;
-
-                    return (
-                      <div
-                        key={charId}
-                        className={`bg-gray-50 dark:bg-gray-800 rounded-br-md rounded-tl-md p-2 flex flex-col items-center border-2 ${
-                          character.rarity === 5
-                            ? "border-yellow-400"
-                            : character.rarity === 4
-                            ? "border-purple-400"
-                            : "border-blue-400"
-                        }`}
-                      >
-                        <div
-                          className={`relative w-16 h-16 rounded-br-md rounded-tl-md overflow-hidden mb-2 ${
-                            character.rarity === 5
-                              ? "bg-yellow-100 dark:bg-yellow-900"
-                              : character.rarity === 4
-                              ? "bg-purple-100 dark:bg-purple-900"
-                              : "bg-blue-100 dark:bg-blue-900"
-                          }`}
-                        >
-                          <img
-                            src={character.image}
-                            alt={character.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) =>
-                              (e.target.src = "/placeholder-character.jpg")
-                            }
-                          />
-                          <div
-                            className={`absolute bottom-0 right-0 w-5 h-5 rounded-br-md rounded-tl-md flex items-center justify-center text-xs text-white font-bold ${
-                              character.rarity === 5
-                                ? "bg-yellow-500"
-                                : character.rarity === 4
-                                ? "bg-purple-500"
-                                : "bg-blue-500"
-                            }`}
-                          >
-                            {character.rarity}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {Object.values(obtainedCharacters)
+                  .sort(
+                    (a, b) =>
+                      b.rarity - a.rarity || a.name.localeCompare(b.name)
+                  )
+                  .map((char) => (
+                    <div
+                      key={char.id}
+                      className={`bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden ${
+                        char.rarity === 5
+                          ? "border-2 border-yellow-400"
+                          : char.rarity === 4
+                          ? "border-2 border-purple-400"
+                          : "border border-gray-300"
+                      }`}
+                    >
+                      <img
+                        src={char.image}
+                        alt={char.name}
+                        className="w-full h-24 object-cover"
+                      />
+                      <div className="p-2">
+                        <h4 className="font-medium text-gray-800 dark:text-white text-sm truncate">
+                          {char.name}
+                        </h4>
+                        <div className="flex justify-between items-center mt-1">
+                          <div className="flex items-center">
+                            <span className="text-yellow-500 text-xs">
+                              {Array(char.rarity).fill("★").join("")}
+                            </span>
                           </div>
+                          <span className="text-xs text-gray-500 dark:text-gray-300">
+                            x{char.count}
+                          </span>
                         </div>
-                        <h3 className="text-sm font-medium text-center text-gray-800 dark:text-white truncate w-full">
-                          {character.name}
-                        </h3>
-                        <div className="mt-1 px-2 py-1 bg-green-100 dark:bg-green-800 rounded-xl text-xs font-medium text-green-800 dark:text-green-100">
-                          SA.LV {saLevel}
+                        <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          SA.LV: {characterSALevels[char.id] || 1}
                         </div>
                       </div>
-                    );
-                  })
-                  .filter(Boolean)}
+                    </div>
+                  ))}
               </div>
             )}
           </div>
