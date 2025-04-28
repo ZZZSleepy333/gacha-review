@@ -968,7 +968,7 @@ const GachaSimulator = () => {
                   Transient Stone đã dùng:
                 </span>
                 <span className="font-medium text-blue-600 dark:text-blue-400">
-                  {stats.totalCrystals.toLocaleString()}
+                  {stats.totalCrystals}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -976,7 +976,7 @@ const GachaSimulator = () => {
                   Ticket đã dùng:
                 </span>
                 <span className="font-medium text-blue-600 dark:text-blue-400">
-                  {stats.totalTickets.toLocaleString()}
+                  {stats.totalTickets}
                 </span>
               </div>
             </div>
