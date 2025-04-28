@@ -85,6 +85,7 @@ const GachaSimulator = () => {
   // Fetch danh sách banner khi component mount
   useEffect(() => {
     const fetchBanners = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/banners`
@@ -105,6 +106,7 @@ const GachaSimulator = () => {
           // Nếu không có hoặc không tìm thấy, chọn banner đầu tiên
           setSelectedBanner(response.data[0]);
         }
+        setIsLoading(false);
       } catch (error) {
         console.error("Lỗi khi lấy danh sách banner:", error);
       }
@@ -723,191 +725,202 @@ const GachaSimulator = () => {
           </div>
         </div>
 
-        {/* Chọn banner */}
-        <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-4 mb-6">
-          <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
-            Chọn Banner
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {banners.map((banner) => (
-              <div
-                key={banner._id}
-                className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
-                  selectedBanner && selectedBanner._id === banner._id
-                    ? "border-blue-500 shadow-lg transform scale-105"
-                    : "border-gray-200 dark:border-gray-600 hover:border-blue-300"
-                }`}
-                onClick={() => setSelectedBanner(banner)}
-              >
-                <img
-                  src={banner.image}
-                  alt={banner.name}
-                  className="w-full h-32 object-cover"
-                  onError={(e) => (e.target.src = "/placeholder-banner.jpg")}
-                />
-                <div className="p-2 bg-white dark:bg-gray-800">
-                  <h3 className="text-sm font-medium text-center text-gray-800 dark:text-white truncate">
-                    {banner.name}
-                  </h3>
-                </div>
-              </div>
-            ))}
+        {isLoading ? (
+          <div className="flex justify-center my-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
-        </div>
-
-        {/* Thông tin banner đã chọn */}
-        <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-4 mb-6">
-          <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
-            {selectedBanner ? selectedBanner.name : "Chọn banner để bắt đầu"}
-          </h2>
-
-          <div className="mb-4">
-            {selectedBanner && (
-              <img
-                src={selectedBanner.image}
-                alt={selectedBanner.name}
-                className="w-full h-full object-cover rounded-lg"
-                onError={(e) => (e.target.src = "/placeholder-banner.jpg")}
-              />
-            )}
-          </div>
-
-          <div className="mb-4">
-            <h3 className="text-md font-medium mb-2 text-gray-800 dark:text-white">
-              Nhân vật Rate-Up
-            </h3>
-            {selectedBanner && (
-              <div className="flex flex-wrap gap-2">
-                {selectedBanner.characters
-                  .filter(
-                    (char) =>
-                      char.rateUpStatus === "rateup-1" ||
-                      char.rateUpStatus === "rateup-2"
-                  )
-                  .sort((a, b) => {
-                    // Sắp xếp theo rarity trước (cao đến thấp)
-                    if (b.rarity !== a.rarity) {
-                      return b.rarity - a.rarity;
-                    }
-                    // Nếu rarity bằng nhau, sắp xếp theo tên (A-Z)
-                    return a.name.localeCompare(b.name);
-                  })
-                  .map((char) => (
-                    <div
-                      key={char._id}
-                      className="flex flex-col items-center w-fit"
-                    >
-                      <div
-                        className={`relative w-16 h-16 rounded-br-md rounded-tl overflow-hidden border-2 ${
-                          char.rarity === 5
-                            ? "border-yellow-400"
-                            : char.rarity === 4
-                            ? "border-purple-400"
-                            : "border-blue-400"
-                        }`}
-                      >
-                        <img
-                          src={char.image}
-                          alt={char.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) =>
-                            (e.target.src = "/placeholder-character.jpg")
-                          }
-                        />
-                        <div className="absolute bottom-0 right-0 w-5 h-5 bg-yellow-500 rounded-br-md rounded-tl flex items-center justify-center text-xs text-white font-bold">
-                          {char.rarity}
-                        </div>
-                      </div>
-                      <div className="w-full h-10 flex flex-col items-center justify-start">
-                        <span className="text-xs mt-1 text-center text-gray-700 dark:text-gray-300 line-clamp-1 w-full">
-                          {char.name}
-                        </span>
-                        <span className="text-xs text-center text-gray-500 dark:text-gray-400">
-                          {char.rarity === 5 || char.rarity === 4
-                            ? "Featured"
-                            : "Rate Up"}
-                        </span>
-                      </div>
+        ) : (
+          <>
+            {/* Chọn banner */}
+            <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-4 mb-6">
+              <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
+                Chọn Banner
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {banners.map((banner) => (
+                  <div
+                    key={banner._id}
+                    className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                      selectedBanner && selectedBanner._id === banner._id
+                        ? "border-blue-500 shadow-lg transform scale-105"
+                        : "border-gray-200 dark:border-gray-600 hover:border-blue-300"
+                    }`}
+                    onClick={() => setSelectedBanner(banner)}
+                  >
+                    <img
+                      src={banner.image}
+                      alt={banner.name}
+                      className="w-full h-32 object-cover"
+                      onError={(e) =>
+                        (e.target.src = "/placeholder-banner.jpg")
+                      }
+                    />
+                    <div className="p-2 bg-white dark:bg-gray-800">
+                      <h3 className="text-sm font-medium text-center text-gray-800 dark:text-white truncate">
+                        {banner.name}
+                      </h3>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+            {/* Thông tin banner đã chọn */}
+            <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-4 mb-6">
+              <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
+                {selectedBanner
+                  ? selectedBanner.name
+                  : "Chọn banner để bắt đầu"}
+              </h2>
 
-          {/* Nút quay */}
-          <div className="flex justify-center gap-4 mt-4">
-            <button
-              onClick={() => performPull(true, true)}
-              disabled={isLoading || tickets < TICKET_PULL_COST}
-              className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
-                isLoading || tickets < TICKET_PULL_COST
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-green-500 text-white hover:bg-green-600"
-              }`}
-            >
-              Quay bằng vé (
-              <span className="flex items-center gap-1">
-                {TICKET_PULL_COST}
-                <img
-                  src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_gachaticket.png"
-                  alt="Ticket"
-                  className="w-8 h-8 mr-2"
-                  onError={(e) =>
-                    (e.target.src = "https://via.placeholder.com/32")
-                  }
-                />
-              </span>
-              )
-            </button>
-            <button
-              onClick={() => performPull(true)}
-              disabled={isLoading || crystals < SINGLE_PULL_COST}
-              className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
-                isLoading || crystals < SINGLE_PULL_COST
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              Quay 1 lần (
-              <span className="flex items-center gap-1">
-                {SINGLE_PULL_COST}
-                <img
-                  src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_stone.png"
-                  alt="Crystal"
-                  className="w-5 h-5"
-                  onError={(e) =>
-                    (e.currentTarget.src = "https://via.placeholder.com/32")
-                  }
-                />
-              </span>
-              )
-            </button>
+              <div className="mb-4">
+                {selectedBanner && (
+                  <img
+                    src={selectedBanner.image}
+                    alt={selectedBanner.name}
+                    className="w-full h-full object-cover rounded-lg"
+                    onError={(e) => (e.target.src = "/placeholder-banner.jpg")}
+                  />
+                )}
+              </div>
 
-            <button
-              onClick={() => performPull(false)}
-              disabled={isLoading || crystals < MULTI_PULL_COST}
-              className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
-                isLoading || crystals < MULTI_PULL_COST
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-purple-500 text-white hover:bg-purple-600"
-              }`}
-            >
-              Quay 10 lần (
-              <span className="flex items-center gap-1">
-                {MULTI_PULL_COST}
-                <img
-                  src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_stone.png"
-                  alt="Crystal"
-                  className="w-5 h-5"
-                  onError={(e) =>
-                    (e.currentTarget.src = "https://via.placeholder.com/32")
-                  }
-                />
-              </span>
-              )
-            </button>
-          </div>
-        </div>
+              <div className="mb-4">
+                <h3 className="text-md font-medium mb-2 text-gray-800 dark:text-white">
+                  Nhân vật Rate-Up
+                </h3>
+                {selectedBanner && (
+                  <div className="flex flex-wrap gap-2">
+                    {selectedBanner.characters
+                      .filter(
+                        (char) =>
+                          char.rateUpStatus === "rateup-1" ||
+                          char.rateUpStatus === "rateup-2"
+                      )
+                      .sort((a, b) => {
+                        // Sắp xếp theo rarity trước (cao đến thấp)
+                        if (b.rarity !== a.rarity) {
+                          return b.rarity - a.rarity;
+                        }
+                        // Nếu rarity bằng nhau, sắp xếp theo tên (A-Z)
+                        return a.name.localeCompare(b.name);
+                      })
+                      .map((char) => (
+                        <div
+                          key={char._id}
+                          className="flex flex-col items-center w-fit"
+                        >
+                          <div
+                            className={`relative w-16 h-16 rounded-br-md rounded-tl overflow-hidden border-2 ${
+                              char.rarity === 5
+                                ? "border-yellow-400"
+                                : char.rarity === 4
+                                ? "border-purple-400"
+                                : "border-blue-400"
+                            }`}
+                          >
+                            <img
+                              src={char.image}
+                              alt={char.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) =>
+                                (e.target.src = "/placeholder-character.jpg")
+                              }
+                            />
+                            <div className="absolute bottom-0 right-0 w-5 h-5 bg-yellow-500 rounded-br-md rounded-tl flex items-center justify-center text-xs text-white font-bold">
+                              {char.rarity}
+                            </div>
+                          </div>
+                          <div className="w-full h-10 flex flex-col items-center justify-start">
+                            <span className="text-xs mt-1 text-center text-gray-700 dark:text-gray-300 line-clamp-1 w-full">
+                              {char.name}
+                            </span>
+                            <span className="text-xs text-center text-gray-500 dark:text-gray-400">
+                              {char.rarity === 5 || char.rarity === 4
+                                ? "Featured"
+                                : "Rate Up"}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Nút quay */}
+              <div className="flex justify-center gap-4 mt-4">
+                <button
+                  onClick={() => performPull(true, true)}
+                  disabled={isLoading || tickets < TICKET_PULL_COST}
+                  className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
+                    isLoading || tickets < TICKET_PULL_COST
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-green-500 text-white hover:bg-green-600"
+                  }`}
+                >
+                  Quay bằng vé (
+                  <span className="flex items-center gap-1">
+                    {TICKET_PULL_COST}
+                    <img
+                      src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_gachaticket.png"
+                      alt="Ticket"
+                      className="w-8 h-8 mr-2"
+                      onError={(e) =>
+                        (e.target.src = "https://via.placeholder.com/32")
+                      }
+                    />
+                  </span>
+                  )
+                </button>
+                <button
+                  onClick={() => performPull(true)}
+                  disabled={isLoading || crystals < SINGLE_PULL_COST}
+                  className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
+                    isLoading || crystals < SINGLE_PULL_COST
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  Quay 1 lần (
+                  <span className="flex items-center gap-1">
+                    {SINGLE_PULL_COST}
+                    <img
+                      src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_stone.png"
+                      alt="Crystal"
+                      className="w-5 h-5"
+                      onError={(e) =>
+                        (e.currentTarget.src = "https://via.placeholder.com/32")
+                      }
+                    />
+                  </span>
+                  )
+                </button>
+
+                <button
+                  onClick={() => performPull(false)}
+                  disabled={isLoading || crystals < MULTI_PULL_COST}
+                  className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
+                    isLoading || crystals < MULTI_PULL_COST
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-purple-500 text-white hover:bg-purple-600"
+                  }`}
+                >
+                  Quay 10 lần (
+                  <span className="flex items-center gap-1">
+                    {MULTI_PULL_COST}
+                    <img
+                      src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_stone.png"
+                      alt="Crystal"
+                      className="w-5 h-5"
+                      onError={(e) =>
+                        (e.currentTarget.src = "https://via.placeholder.com/32")
+                      }
+                    />
+                  </span>
+                  )
+                </button>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Animation và kết quả quay */}
         {showAnimation ? (
