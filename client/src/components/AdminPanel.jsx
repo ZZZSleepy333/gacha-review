@@ -397,7 +397,7 @@ const AdminPage = () => {
   // };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-700 shadow rounded-lg">
       <Snackbar
         show={snackbar.show}
         message={snackbar.message}
@@ -405,9 +405,9 @@ const AdminPage = () => {
       />
       {/* Header */}
 
-      <header className="bg-white shadow-sm">
+      <header className="bg-white dark:bg-gray-700 shadow-sm rounded-t-lg shadow">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Trang quản lý nhân vật
           </h1>
           <div className="flex space-x-4">
@@ -416,7 +416,7 @@ const AdminPage = () => {
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "create"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 dark:text-gray-50   hover:dark:border-gray-200 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               {formData._id ? "Chỉnh sửa Review" : "Tạo Review"}
@@ -429,7 +429,7 @@ const AdminPage = () => {
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "manage"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-50  hover:dark:border-gray-200"
               }`}
             >
               Quản lý Review
@@ -439,7 +439,7 @@ const AdminPage = () => {
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "banner"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-50  hover:dark:border-gray-200"
               }`}
             >
               Quản lý nhân vật
@@ -449,7 +449,7 @@ const AdminPage = () => {
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "gacha"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-50  hover:dark:border-gray-200"
               }`}
             >
               Quản lý Gacha
@@ -458,7 +458,7 @@ const AdminPage = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 ">
         {/* Create/Edit Form */}
         {activeTab === "create" && (
           <CharacterForm

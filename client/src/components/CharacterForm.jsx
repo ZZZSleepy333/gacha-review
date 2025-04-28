@@ -22,20 +22,20 @@ const CharacterForm = ({
   characterTypesOptions,
 }) => {
   return (
-    <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
-      <div className="p-6">
+    <div className="bg-white dark:bg-gray-700   overflow-hidden mb-4">
+      <div className="p-4">
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Left Column */}
             <div className="space-y-6">
               {/* Basic Info */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b pb-2">
                   Thông tin cơ bản
                 </h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1 ">
                     Danh hiệu
                   </label>
                   <input
@@ -43,13 +43,13 @@ const CharacterForm = ({
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className="border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-50"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Tên nhân vật
                   </label>
                   <input
@@ -57,13 +57,13 @@ const CharacterForm = ({
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Hình ảnh
                   </label>
                   <input
@@ -71,7 +71,7 @@ const CharacterForm = ({
                     name="image"
                     value={formData.image}
                     onChange={handleChange}
-                    className="border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                   {formData.image && (
@@ -91,19 +91,19 @@ const CharacterForm = ({
 
               {/* Attributes */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
+                <h3 className="text-lg font-medium text-gray-900 border-b dark:text-gray-100 pb-2">
                   Các thông tin khác
                 </h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Độ hiếm
                   </label>
                   <select
                     name="rarity"
                     value={formData.rarity}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {rarityOptions.map((rarity) => (
@@ -115,14 +115,14 @@ const CharacterForm = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Loại nhân vật
                   </label>
                   <select
                     name="characterType"
                     value={formData.characterType}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {characterTypesOptions.map((chrType) => (
@@ -134,14 +134,14 @@ const CharacterForm = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Hệ nguyên tố
                   </label>
                   <select
                     name="attribute"
                     value={formData.attribute}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {attributeOptions.map((attr) => (
@@ -153,14 +153,14 @@ const CharacterForm = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Tầm đánh
                   </label>
                   <select
                     name="weaponType"
                     value={formData.weaponType}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {weaponTypeOptions.map((weapon) => (
@@ -172,14 +172,14 @@ const CharacterForm = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Học viện
                   </label>
                   <select
                     name="school"
                     value={formData.school}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {schoolOptions.map((school) => (
@@ -191,14 +191,14 @@ const CharacterForm = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Guild
                   </label>
                   <select
                     name="guild"
                     value={formData.guild}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {guildOptions.map((guild) => (
@@ -210,14 +210,14 @@ const CharacterForm = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Quan hệ
                   </label>
                   <select
                     name="affiliation"
                     value={formData.affiliation}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {affiliationOptions.map((affiliation) => (
@@ -229,14 +229,14 @@ const CharacterForm = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Vai trò
                   </label>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {formData.roles.map((role) => (
                       <span
                         key={role}
-                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                        className=" inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 "
                       >
                         {role}
                         <button
@@ -252,7 +252,7 @@ const CharacterForm = ({
                   <select
                     onChange={(e) => handleRoleSelect(e.target.value)}
                     value=""
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   >
                     <option value="">Thêm vai trò...</option>
                     {roleOptions
@@ -271,12 +271,12 @@ const CharacterForm = ({
             <div className="space-y-6">
               {/* Stats */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b pb-2">
                   Thông số
                 </h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     HP tối đa
                   </label>
                   <input
@@ -284,40 +284,40 @@ const CharacterForm = ({
                     name="maxHp"
                     value={formData.maxHp}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tấn công tối đa
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
+                    ATK tối đa
                   </label>
                   <input
                     type="number"
                     name="maxAttack"
                     value={formData.maxAttack}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Seiyuu
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
+                    Lồng tiếng
                   </label>
                   <input
                     type="text"
                     name="voiceActors"
                     value={formData.voiceActors}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Illustrator
                   </label>
                   <input
@@ -325,19 +325,19 @@ const CharacterForm = ({
                     name="illustrators"
                     value={formData.illustrators}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
               </div>
 
               {/* Charge Skill */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
+                <h3 className="text-lg font-medium text-gray-900 border-b dark:text-gray-100 pb-2">
                   Charge Skill
                 </h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Tên Charge Skill
                   </label>
                   <input
@@ -345,13 +345,13 @@ const CharacterForm = ({
                     name="chargeSkill.chargeSkillName"
                     value={formData.chargeSkill.chargeSkillName}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Mô tả Charge Skill
                   </label>
                   <textarea
@@ -359,20 +359,20 @@ const CharacterForm = ({
                     value={formData.chargeSkill.chargeSkillDescription}
                     onChange={handleChange}
                     rows={4}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Loại CS
                   </label>
                   <select
                     name="chargeSkill.csType"
                     value={formData.chargeSkill.csType}
                     onChange={handleChange}
-                    className="border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     {weaponTypeOptions.map((weapon) => (
@@ -386,12 +386,12 @@ const CharacterForm = ({
 
               {/* Review */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
+                <h3 className="text-lg font-medium text-gray-900 border-b dark:text-gray-100 pb-2">
                   Đánh giá
                 </h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Đánh giá tổng quan
                   </label>
                   <div className="flex flex-wrap gap-3">
@@ -435,7 +435,7 @@ const CharacterForm = ({
                 </div>
 
                 <div className="">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Điểm nổi bật
                   </label>
                   <textarea
@@ -443,13 +443,13 @@ const CharacterForm = ({
                     value={formData.strongPoints}
                     onChange={handleChange}
                     rows={3}
-                    className="p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className=" dark:bg-gray-600 dark:text-gray-50 p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                 </div>
 
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Điểm lưu ý
                   </label>
                   <textarea
@@ -457,13 +457,13 @@ const CharacterForm = ({
                     value={formData.weakPoints}
                     onChange={handleChange}
                     rows={3}
-                    className="p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="dark:bg-gray-600 dark:text-gray-50 p-2 block w-full h-60 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium dark:text-gray-50 text-gray-700 mb-1">
                     Đánh giá cuối cùng
                   </label>
                   <ReactQuill
@@ -474,7 +474,7 @@ const CharacterForm = ({
                         finalReview: value,
                       }))
                     }
-                    className="h-32 mb-12"
+                    className="dark:bg-gray-600 dark:text-gray-50 h-full mb-12 rounded-lg"
                   />
                 </div>
               </div>

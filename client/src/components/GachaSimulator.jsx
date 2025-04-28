@@ -30,6 +30,8 @@ const GachaSimulator = () => {
       ? JSON.parse(savedStats)
       : {
           totalPulls: 0,
+          totalCrystals: 0,
+          totalTickets: 0,
           rarity5Count: 0,
           rarity4Count: 0,
           rarity3Count: 0,
@@ -342,9 +344,11 @@ const GachaSimulator = () => {
   };
 
   // Cập nhật thống kê
-  const updateStats = (results) => {
+  const updateStats = (results, consumedCrystal, consumedTicket) => {
     setStats((prev) => {
       const newStats = { ...prev };
+      newStats.totalCrystals += consumedCrystal;
+      newStats.totalTickets += consumedTicket;
       newStats.totalPulls += results.length;
 
       results.forEach((char) => {
@@ -382,6 +386,8 @@ const GachaSimulator = () => {
       setCharacterSALevels({});
       setStats({
         totalPulls: 0,
+        totalCrystals: 0,
+        totalTickets: 0,
         rarity5Count: 0,
         rarity4Count: 0,
         rarity3Count: 0,
@@ -406,6 +412,8 @@ const GachaSimulator = () => {
 
     // Kiểm tra đủ crystal/vé không
     let cost = isSingle ? SINGLE_PULL_COST : MULTI_PULL_COST;
+    let consumedCrystal = 0;
+    let consumedTicket = 0;
 
     if (useTicket) {
       if (tickets < TICKET_PULL_COST) {
@@ -426,8 +434,10 @@ const GachaSimulator = () => {
     // Trừ crystal hoặc vé
     if (useTicket) {
       setTickets((prev) => prev - TICKET_PULL_COST);
+      consumedTicket = TICKET_PULL_COST;
     } else {
       setCrystals((prev) => prev - cost);
+      consumedCrystal = cost;
     }
 
     // Tạo kết quả quay
@@ -502,7 +512,7 @@ const GachaSimulator = () => {
         ...prev,
       ]);
       // Cập nhật thống kê
-      updateStats(results);
+      updateStats(results, consumedCrystal, consumedTicket);
       setIsLoading(false);
     }, 1500);
   };
@@ -594,7 +604,7 @@ const GachaSimulator = () => {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800 min-h-screen p-4">
+    <div className="bg-gray-50 dark:bg-gray-800 min-h-screen p-4 rounded-lg shadow">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-white">
           Mô phỏng Gacha
@@ -746,7 +756,7 @@ const GachaSimulator = () => {
                   .map((char) => (
                     <div key={char._id} className="flex flex-col items-center">
                       <div
-                        className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 ${
+                        className={`relative w-16 h-16 rounded-br-md rounded-tl overflow-hidden border-2 ${
                           char.rarity === 5
                             ? "border-yellow-400"
                             : char.rarity === 4
@@ -762,7 +772,7 @@ const GachaSimulator = () => {
                             (e.target.src = "/placeholder-character.jpg")
                           }
                         />
-                        <div className="absolute bottom-0 right-0 w-5 h-5 bg-yellow-500 rounded-xl flex items-center justify-center text-xs text-white font-bold">
+                        <div className="absolute bottom-0 right-0 w-5 h-5 bg-yellow-500 rounded-br-md rounded-tl flex items-center justify-center text-xs text-white font-bold">
                           {char.rarity}
                         </div>
                       </div>
@@ -958,7 +968,15 @@ const GachaSimulator = () => {
                   Transient Stone đã dùng:
                 </span>
                 <span className="font-medium text-blue-600 dark:text-blue-400">
-                  {(stats.totalPulls * 5).toLocaleString()}
+                  {stats.totalCrystals.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600 dark:text-gray-300">
+                  Ticket đã dùng:
+                </span>
+                <span className="font-medium text-blue-600 dark:text-blue-400">
+                  {stats.totalTickets.toLocaleString()}
                 </span>
               </div>
             </div>

@@ -139,29 +139,29 @@ const GachaComponents = ({ showSnackbar }) => {
     // Kiểm tra xem tham số là object action hay character trực tiếp
     if (characterOrAction && characterOrAction.action) {
       const { action } = characterOrAction;
-      
+
       // Xử lý các loại action
       if (action === "addMultiple") {
-        setSelectedCharacters([...selectedCharacters, ...characterOrAction.characters]);
-      } 
-      else if (action === "removeMultiple") {
+        setSelectedCharacters([
+          ...selectedCharacters,
+          ...characterOrAction.characters,
+        ]);
+      } else if (action === "removeMultiple") {
         setSelectedCharacters(
           selectedCharacters.filter(
             (char) => !characterOrAction.characterIds.includes(char._id)
           )
         );
-      }
-      else if (action === "update") {
+      } else if (action === "update") {
         // Cập nhật character với status mới
         setSelectedCharacters(
           selectedCharacters.map((char) =>
-            char._id === characterOrAction.character._id 
-              ? characterOrAction.character 
+            char._id === characterOrAction.character._id
+              ? characterOrAction.character
               : char
           )
         );
-      }
-      else if (action === "replaceAll") {
+      } else if (action === "replaceAll") {
         // Thay thế toàn bộ danh sách nhân vật
         setSelectedCharacters(characterOrAction.characters);
       }
@@ -173,12 +173,17 @@ const GachaComponents = ({ showSnackbar }) => {
 
       if (isSelected) {
         setSelectedCharacters(
-          selectedCharacters.filter((char) => char._id !== characterOrAction._id)
+          selectedCharacters.filter(
+            (char) => char._id !== characterOrAction._id
+          )
         );
       } else {
         setSelectedCharacters([
           ...selectedCharacters,
-          { ...characterOrAction, rateUpStatus: characterOrAction.rateUpStatus || "normal" },
+          {
+            ...characterOrAction,
+            rateUpStatus: characterOrAction.rateUpStatus || "normal",
+          },
         ]);
       }
     }
@@ -194,11 +199,7 @@ const GachaComponents = ({ showSnackbar }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
-        Quản lý Banner Gacha
-      </h2>
-      
+    <div className="bg-white dark:bg-gray-700  p-4">
       {isLoading ? (
         <div className="flex justify-center my-8">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -206,7 +207,7 @@ const GachaComponents = ({ showSnackbar }) => {
       ) : (
         <>
           {/* Danh sách banner */}
-          <BannerList 
+          <BannerList
             banners={banners}
             onEdit={(banner) => {
               setEditingBanner(banner);

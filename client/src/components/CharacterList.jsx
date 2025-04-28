@@ -594,10 +594,10 @@ const CharacterList = () => {
                   <div className="p-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-300">
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                           {character.name}
                         </h2>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600 dark:text-gray-50">
                           {character.title}
                         </p>
                       </div>

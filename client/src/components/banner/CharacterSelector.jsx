@@ -58,19 +58,19 @@ const CharacterSelector = ({
       if (charactersToAdd.length > 0) {
         // Tạo một bản sao của danh sách nhân vật đã chọn
         const updatedCharacters = [...selectedCharacters];
-        
+
         // Thêm tất cả nhân vật mới vào danh sách
-        charactersToAdd.forEach(character => {
+        charactersToAdd.forEach((character) => {
           updatedCharacters.push({
             ...character,
-            rateUpStatus: "normal"
+            rateUpStatus: "normal",
           });
         });
-        
+
         // Cập nhật state với danh sách mới
         onToggleCharacter({
           action: "replaceAll",
-          characters: updatedCharacters
+          characters: updatedCharacters,
         });
       }
     }
@@ -85,13 +85,16 @@ const CharacterSelector = ({
       if (charactersToRemove.length > 0) {
         // Tạo một bản sao của danh sách nhân vật đã chọn
         const updatedCharacters = selectedCharacters.filter(
-          (char) => !charactersToRemove.some(removeChar => removeChar._id === char._id)
+          (char) =>
+            !charactersToRemove.some(
+              (removeChar) => removeChar._id === char._id
+            )
         );
-        
+
         // Cập nhật state với danh sách mới
         onToggleCharacter({
           action: "replaceAll",
-          characters: updatedCharacters
+          characters: updatedCharacters,
         });
       }
     }
@@ -110,18 +113,20 @@ const CharacterSelector = ({
     // Nếu chưa được chọn, thêm vào với rate-up đã chọn
     if (!isSelected) {
       onToggleCharacter({ ...character, rateUpStatus: status });
-    } 
+    }
     // Nếu đã được chọn, cập nhật rate-up
     else {
       // Thay vì gọi onRateUpChange, sử dụng onToggleCharacter với action update
-      if (typeof onToggleCharacter === 'function') {
+      if (typeof onToggleCharacter === "function") {
         // Tìm character hiện tại trong selectedCharacters để giữ nguyên các thuộc tính khác
-        const currentChar = selectedCharacters.find(char => char._id === character._id);
+        const currentChar = selectedCharacters.find(
+          (char) => char._id === character._id
+        );
         if (currentChar) {
           // Cập nhật character với status mới
           onToggleCharacter({
             action: "update",
-            character: { ...currentChar, rateUpStatus: status }
+            character: { ...currentChar, rateUpStatus: status },
           });
         }
       }
@@ -138,7 +143,7 @@ const CharacterSelector = ({
     // Nếu đã chọn, bỏ chọn
     if (isSelected) {
       onToggleCharacter(character);
-    } 
+    }
     // Nếu chưa chọn, thêm vào với trạng thái normal
     else {
       onToggleCharacter({ ...character, rateUpStatus: "normal" });
@@ -175,14 +180,14 @@ const CharacterSelector = ({
   useEffect(() => {
     const categories = categorizedCharacters();
     const newSelectedAllCategories = {};
-    
+
     Object.entries(categories).forEach(([category, chars]) => {
       const allSelected = chars.every((character) =>
         selectedCharacters.some((char) => char._id === character._id)
       );
       newSelectedAllCategories[category] = allSelected;
     });
-    
+
     setSelectedAllCategories(newSelectedAllCategories);
   }, [selectedCharacters]);
 
@@ -199,7 +204,7 @@ const CharacterSelector = ({
             placeholder="Tìm kiếm nhân vật..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full p-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 dark:text-white"
+            className="w-full p-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-600 dark:text-white"
           />
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg
@@ -313,7 +318,10 @@ const CharacterSelector = ({
                     </p>
 
                     {/* Nút chọn rate-up trực tiếp */}
-                    <div className="flex items-center justify-center mt-2 space-x-1" onClick={(e) => e.stopPropagation()}>
+                    <div
+                      className="flex items-center justify-center mt-2 space-x-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <button
                         onClick={(e) => {
                           handleDirectRateUpChange(

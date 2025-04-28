@@ -4,9 +4,9 @@ const BannerList = ({ banners, onEdit, onDelete, onAddNew }) => {
   return (
     <div className="mb-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-          Danh sách Banner ({banners.length})
-        </h3>
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+          Danh sách Banners ({banners.length})
+        </h2>
         <button
           onClick={onAddNew}
           className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"

@@ -36,7 +36,7 @@ const BannerForm = ({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 dark:text-white"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-600 dark:text-white"
               required
             />
           </div>
@@ -49,7 +49,7 @@ const BannerForm = ({
               name="image"
               value={formData.image}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 dark:text-white"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-600 dark:text-white"
               required
             />
           </div>
