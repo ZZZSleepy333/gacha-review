@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (password) => {
     // Mật khẩu đơn giản - bạn nên thay đổi thành mật khẩu mạnh hơn
-    if (password === "housamovn2023") {
+    if (password === process.env.REACT_APP_ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       localStorage.setItem("isAdminAuthenticated", "true");
       return true;
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     isAuthenticated,
     login,
-    logout
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
