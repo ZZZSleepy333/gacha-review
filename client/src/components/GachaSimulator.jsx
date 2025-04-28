@@ -266,11 +266,11 @@ const GachaSimulator = () => {
     }
 
     // Ánh xạ ngược lại từ rateup-1/rateup-2 sang rateup/featured
-    const mapBackRateUpStatus = (status) => {
-      if (status === "rateup-1") return "rateup-1";
-      if (status === "rateup-2") return "rateup-2";
-      return "normal";
-    };
+    // const mapBackRateUpStatus = (status) => {
+    //   if (status === "rateup-1") return "rateup-1";
+    //   if (status === "rateup-2") return "rateup-2";
+    //   return "normal";
+    // };
 
     // Lọc nhân vật theo rarity
     let charactersPool = banner.characters.filter(
@@ -291,12 +291,12 @@ const GachaSimulator = () => {
         image: "/placeholder-character.jpg",
         rarity: rarity,
         isRateUp: rateUpStatus !== "normal",
-        rateUpStatus: mapBackRateUpStatus(rateUpStatus),
+        rateUpStatus: rateUpStatus,
       };
     }
 
     // Lọc theo rateUpStatus nếu có
-    const mappedRateUpStatus = mapBackRateUpStatus(rateUpStatus);
+    const mappedRateUpStatus = rateUpStatus;
     let rateUpChars = charactersPool.filter(
       (char) => char.rateUpStatus === mappedRateUpStatus
     );
@@ -531,13 +531,6 @@ const GachaSimulator = () => {
             results.push(getRandomCharacter(selectedBanner));
           }
         }
-
-        // Đảm bảo ít nhất có 1 nhân vật 4* trở lên
-        const hasRare = results.some((char) => char.rarity >= 4);
-        if (!hasRare) {
-          // Thay thế nhân vật cuối cùng bằng nhân vật 4* trở lên
-          results[9] = getRandomCharacter(selectedBanner, 4);
-        }
       }
       updateSALevels(results);
 
@@ -600,13 +593,6 @@ const GachaSimulator = () => {
       }
     }
 
-    // Ánh xạ ngược lại từ rateup-1/rateup-2 sang rateup/featured
-    const mapBackRateUpStatus = (status) => {
-      if (status === "rateup-1") return "rateup-1";
-      if (status === "rateup-2") return "rateup-2";
-      return "normal";
-    };
-
     // Lọc nhân vật theo rarity
     let charactersPool = banner.characters.filter(
       (char) => char.rarity === targetRarity
@@ -620,12 +606,12 @@ const GachaSimulator = () => {
         image: "/placeholder-character.jpg",
         rarity: targetRarity,
         isRateUp: rateUpStatus !== "normal",
-        rateUpStatus: mapBackRateUpStatus(rateUpStatus),
+        rateUpStatus: rateUpStatus,
       };
     }
 
     // Lọc theo rateUpStatus nếu có
-    const mappedRateUpStatus = mapBackRateUpStatus(rateUpStatus);
+    const mappedRateUpStatus = rateUpStatus;
     const rateUpChars = charactersPool.filter(
       (char) => char.rateUpStatus === mappedRateUpStatus
     );
@@ -809,7 +795,7 @@ const GachaSimulator = () => {
                   .map((char) => (
                     <div
                       key={char._id}
-                      className="flex flex-col items-center w-20"
+                      className="flex flex-col items-center w-fit"
                     >
                       <div
                         className={`relative w-16 h-16 rounded-br-md rounded-tl overflow-hidden border-2 ${
@@ -853,35 +839,72 @@ const GachaSimulator = () => {
             <button
               onClick={() => performPull(true, true)}
               disabled={isLoading || tickets < TICKET_PULL_COST}
-              className={`px-6 py-2 rounded-md font-medium ${
+              className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
                 isLoading || tickets < TICKET_PULL_COST
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-green-500 text-white hover:bg-green-600"
               }`}
             >
-              Quay bằng vé ({TICKET_PULL_COST})
+              Quay bằng vé (
+              <span className="flex items-center gap-1">
+                {TICKET_PULL_COST}
+                <img
+                  src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_gachaticket.png"
+                  alt="Ticket"
+                  className="w-8 h-8 mr-2"
+                  onError={(e) =>
+                    (e.target.src = "https://via.placeholder.com/32")
+                  }
+                />
+              </span>
+              )
             </button>
             <button
               onClick={() => performPull(true)}
               disabled={isLoading || crystals < SINGLE_PULL_COST}
-              className={`px-6 py-2 rounded-md font-medium ${
+              className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
                 isLoading || crystals < SINGLE_PULL_COST
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-blue-500 text-white hover:bg-blue-600"
               }`}
             >
-              Quay 1 lần ({SINGLE_PULL_COST})
+              Quay 1 lần (
+              <span className="flex items-center gap-1">
+                {SINGLE_PULL_COST}
+                <img
+                  src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_stone.png"
+                  alt="Crystal"
+                  className="w-5 h-5"
+                  onError={(e) =>
+                    (e.currentTarget.src = "https://via.placeholder.com/32")
+                  }
+                />
+              </span>
+              )
             </button>
+
             <button
               onClick={() => performPull(false)}
               disabled={isLoading || crystals < MULTI_PULL_COST}
-              className={`px-6 py-2 rounded-md font-medium ${
+              className={`flex items-center justify-center px-6 py-2 rounded-md font-medium ${
                 isLoading || crystals < MULTI_PULL_COST
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-purple-500 text-white hover:bg-purple-600"
               }`}
             >
-              Quay 10 lần ({MULTI_PULL_COST})
+              Quay 10 lần (
+              <span className="flex items-center gap-1">
+                {MULTI_PULL_COST}
+                <img
+                  src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_stone.png"
+                  alt="Crystal"
+                  className="w-5 h-5"
+                  onError={(e) =>
+                    (e.currentTarget.src = "https://via.placeholder.com/32")
+                  }
+                />
+              </span>
+              )
             </button>
           </div>
         </div>
@@ -1101,9 +1124,9 @@ const GachaSimulator = () => {
                               {Array(char.rarity).fill("★").join("")}
                             </span>
                           </div>
-                          <span className="text-xs text-gray-500 dark:text-gray-300">
+                          {/* <span className="text-xs text-gray-500 dark:text-gray-300">
                             x{char.count}
-                          </span>
+                          </span> */}
                         </div>
                         <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                           SA.LV: {characterSALevels[char.id] || 1}
