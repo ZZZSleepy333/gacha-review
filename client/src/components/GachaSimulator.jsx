@@ -106,9 +106,10 @@ const GachaSimulator = () => {
           // Nếu không có hoặc không tìm thấy, chọn banner đầu tiên
           setSelectedBanner(response.data[0]);
         }
-        setIsLoading(false);
       } catch (error) {
         console.error("Lỗi khi lấy danh sách banner:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
