@@ -405,10 +405,10 @@ const AdminPage = () => {
       />
       {/* Header */}
 
-      <header className="bg-white dark:bg-gray-700 shadow-sm rounded-t-lg shadow">
+      <header className="bg-white dark:bg-gray-700  rounded-t-lg shadow">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            Trang quản lý nhân vật
+            Admin
           </h1>
           <div className="flex space-x-4">
             <button
