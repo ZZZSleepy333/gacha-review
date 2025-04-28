@@ -133,8 +133,8 @@ const GachaSimulator = () => {
 
     // Ánh xạ giá trị rate-up
     const mapRateUpStatus = (status) => {
-      if (status === "rateup") return "rateup-1";
-      if (status === "featured") return "rateup-2";
+      if (status === "rateup-1") return "rateup-1";
+      if (status === "rateup-2") return "rateup-2";
       return "normal";
     };
 
@@ -267,15 +267,8 @@ const GachaSimulator = () => {
 
     // Ánh xạ ngược lại từ rateup-1/rateup-2 sang rateup/featured
     const mapBackRateUpStatus = (status) => {
-      if (status === "rateup-1") return "rateup";
-      if (status === "rateup-2") return "featured";
-      return "normal";
-    };
-
-    // Ánh xạ từ rateup/featured sang rateup-1/rateup-2
-    const mapRateUpStatus = (status) => {
-      if (status === "rateup") return "rateup-1";
-      if (status === "featured") return "rateup-2";
+      if (status === "rateup-1") return "rateup-1";
+      if (status === "rateup-2") return "rateup-2";
       return "normal";
     };
 
@@ -374,11 +367,17 @@ const GachaSimulator = () => {
             image: char.image,
             rarity: char.rarity,
             count: 1,
+            isRateUp: char.isRateUp || false, // Thêm thông tin isRateUp
+            rateUpStatus: char.rateUpStatus || "normal",
             firstObtainedAt: new Date().toISOString(),
           };
         } else {
           // Cập nhật thông tin nếu đã có
           newObtainedCharacters[char._id].count += 1;
+          if (char.isRateUp) {
+            newObtainedCharacters[char._id].isRateUp = true;
+            newObtainedCharacters[char._id].rateUpStatus = char.rateUpStatus;
+          }
         }
       });
 
@@ -603,8 +602,8 @@ const GachaSimulator = () => {
 
     // Ánh xạ ngược lại từ rateup-1/rateup-2 sang rateup/featured
     const mapBackRateUpStatus = (status) => {
-      if (status === "rateup-1") return "rateup";
-      if (status === "rateup-2") return "featured";
+      if (status === "rateup-1") return "rateup-1";
+      if (status === "rateup-2") return "rateup-2";
       return "normal";
     };
 
@@ -796,11 +795,22 @@ const GachaSimulator = () => {
                 {selectedBanner.characters
                   .filter(
                     (char) =>
-                      char.rateUpStatus === "rateup" ||
-                      char.rateUpStatus === "featured"
+                      char.rateUpStatus === "rateup-1" ||
+                      char.rateUpStatus === "rateup-2"
                   )
+                  .sort((a, b) => {
+                    // Sắp xếp theo rarity trước (cao đến thấp)
+                    if (b.rarity !== a.rarity) {
+                      return b.rarity - a.rarity;
+                    }
+                    // Nếu rarity bằng nhau, sắp xếp theo tên (A-Z)
+                    return a.name.localeCompare(b.name);
+                  })
                   .map((char) => (
-                    <div key={char._id} className="flex flex-col items-center">
+                    <div
+                      key={char._id}
+                      className="flex flex-col items-center w-20"
+                    >
                       <div
                         className={`relative w-16 h-16 rounded-br-md rounded-tl overflow-hidden border-2 ${
                           char.rarity === 5
@@ -822,14 +832,16 @@ const GachaSimulator = () => {
                           {char.rarity}
                         </div>
                       </div>
-                      <span className="text-xs mt-1 text-center text-gray-700 dark:text-gray-300">
-                        {char.name}
-                      </span>
-                      <span className="text-xs text-center text-gray-500 dark:text-gray-400">
-                        {char.rateUpStatus === "featured"
-                          ? "Featured"
-                          : "Rate Up"}
-                      </span>
+                      <div className="w-full h-10 flex flex-col items-center justify-start">
+                        <span className="text-xs mt-1 text-center text-gray-700 dark:text-gray-300 line-clamp-1 w-full">
+                          {char.name}
+                        </span>
+                        <span className="text-xs text-center text-gray-500 dark:text-gray-400">
+                          {char.rarity === 5 || char.rarity === 4
+                            ? "Featured"
+                            : "Rate Up"}
+                        </span>
+                      </div>
                     </div>
                   ))}
               </div>
@@ -1041,10 +1053,28 @@ const GachaSimulator = () => {
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {Object.values(obtainedCharacters)
-                  .sort(
-                    (a, b) =>
-                      b.rarity - a.rarity || a.name.localeCompare(b.name)
-                  )
+                  .sort((a, b) => {
+                    // Sắp xếp theo loại rate-up
+                    const rateUpOrder = {
+                      "rateup-1": 0, // rateup-2
+                      "rateup-2": 1, // rateup-1
+                      normal: 2,
+                    };
+                    const statusA = a.rateUpStatus || "normal";
+                    const statusB = b.rateUpStatus || "normal";
+
+                    if (rateUpOrder[statusA] !== rateUpOrder[statusB]) {
+                      return rateUpOrder[statusA] - rateUpOrder[statusB];
+                    }
+
+                    // Sắp xếp theo rarity (cao đến thấp)
+                    if (b.rarity !== a.rarity) {
+                      return b.rarity - a.rarity;
+                    }
+
+                    // Nếu rarity bằng nhau, sắp xếp theo tên (A-Z)
+                    return a.name.localeCompare(b.name);
+                  })
                   .map((char) => (
                     <div
                       key={char.id}
