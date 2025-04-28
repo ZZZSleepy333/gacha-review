@@ -136,14 +136,7 @@ const CharacterList = () => {
       value: "All",
       image: "https://cdn.housamo.xyz/wiki/images/3/3a/Element_none.png",
     },
-    {
-      value: "Null",
-      image: "https://cdn.housamo.xyz/wiki/images/2/2c/Element_zero.png",
-    },
-    {
-      value: "Infinity",
-      image: "https://cdn.housamo.xyz/wiki/images/9/9d/Element_infinity.png",
-    },
+
     {
       value: "World",
       image: "https://cdn.housamo.xyz/wiki/images/3/3d/Element_world.png",
@@ -155,6 +148,14 @@ const CharacterList = () => {
     {
       value: "Infernal",
       image: "https://cdn.housamo.xyz/wiki/images/6/67/Element_evil.png",
+    },
+    {
+      value: "Infinity",
+      image: "https://cdn.housamo.xyz/wiki/images/9/9d/Element_infinity.png",
+    },
+    {
+      value: "Null",
+      image: "https://cdn.housamo.xyz/wiki/images/2/2c/Element_zero.png",
     },
     {
       value: "Divine",
@@ -248,37 +249,25 @@ const CharacterList = () => {
   console.log(typeof attributes);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      {/* <div className="bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Review nhân vật Housamo
-          </h1>
-          <p className="mt-6 max-w-3xl mx-auto text-xl text-blue-100">
-            Làm bởi Tokyo Afterschool Summoners VN
-          </p>
-        </div>
-      </div> */}
-
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Filter/Search Bar */}
-        <div className="bg-white shadow rounded-lg p-4 mb-8">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 mb-8 ">
           <div className="flex flex-col md:flex-col items-start  gap-4">
             {/* Search Input */}
             <div className="flex-1 flex flex-col md:flex-row gap-4">
               <div>
                 <label
                   htmlFor="search"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-white mb-2"
                 >
                   Tìm kiếm nhân vật
                 </label>
                 <div className="relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="h-5 w-5 text-gray-400"
+                      className="h-5 w-5 text-gray-400 dark:text-gray-100"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
@@ -293,7 +282,7 @@ const CharacterList = () => {
                   <input
                     type="text"
                     id="search"
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300  dark:text-gray-100 dark:bg-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Search by name or title..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -302,7 +291,7 @@ const CharacterList = () => {
               </div>
               {/* Tier Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                   Đánh giá nhân vật
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -322,8 +311,8 @@ const CharacterList = () => {
                         }}
                         className={`flex items-center justify-center w-8 h-8 rounded-full border transition text-sm font-semibold ${
                           selected
-                            ? "bg-green-500 border-green-600 text-white"
-                            : "bg-white border-gray-300 text-gray-700"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600 "
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
                         }`}
                       >
                         {review}
@@ -336,7 +325,7 @@ const CharacterList = () => {
             <div className="flex flex-col md:flex-row gap-4">
               {/* Rarity Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                   Độ hiếm
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -353,8 +342,8 @@ const CharacterList = () => {
                         }}
                         className={`flex flex-col items-center justify-center p-2 rounded-lg border transition ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white"
-                            : "bg-white border-gray-300 text-gray-700"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
                         }`}
                       >
                         <img
@@ -370,7 +359,7 @@ const CharacterList = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">
                   Loại nhân vật
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -392,17 +381,21 @@ const CharacterList = () => {
                         }}
                         className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg border transition text-sm ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white"
-                            : "bg-white border-gray-300 text-gray-700"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
                         }`}
                       >
                         {icon && (
-                          <FontAwesomeIcon
-                            icon={icon}
-                            className="mr-1 w-8 h-8 mb-1"
-                          />
+                          <div className="flex justify-center items-center w-full">
+                            <FontAwesomeIcon
+                              icon={icon}
+                              className="w-8 h-8 mb-1"
+                            />
+                          </div>
                         )}
-                        <span className="text-xs text-center">{type}</span>
+                        <span className="text-xs text-center w-full">
+                          {type}
+                        </span>
                       </button>
                     );
                   })}
@@ -412,7 +405,7 @@ const CharacterList = () => {
             <div className="flex flex-col md:flex-row gap-4">
               {/* Weapon Type Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                   Tầm đánh
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -432,8 +425,8 @@ const CharacterList = () => {
                         }}
                         className={`flex flex-col items-center justify-center p-2 rounded-lg border transition ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white"
-                            : "bg-white border-gray-300 text-gray-700"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
                         }`}
                       >
                         <img
@@ -450,7 +443,7 @@ const CharacterList = () => {
 
               {/* Attribute Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                   Hệ nguyên tố
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -467,8 +460,8 @@ const CharacterList = () => {
                         }}
                         className={`flex flex-col items-center justify-center p-2 rounded-lg border transition ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white"
-                            : "bg-white border-gray-300 text-gray-700"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
                         }`}
                       >
                         <img
@@ -500,7 +493,7 @@ const CharacterList = () => {
                     adminReview: [],
                   })
                 }
-                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-50 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500  "
               >
                 Reset
               </button>
@@ -514,7 +507,7 @@ const CharacterList = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
         ) : filteredCharacters.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-lg shadow">
+          <div className="text-center py-16 bg-white rounded-lg shadow dark:bg-gray-700">
             <svg
               className="mx-auto h-12 w-12 text-gray-400"
               fill="none"
@@ -528,10 +521,10 @@ const CharacterList = () => {
                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <h3 className="mt-2 text-lg font-medium text-gray-900">
+            <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-gray-300">
               Không tìm thấy nhân vật nào
             </h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">
               {searchTerm ||
               filters.rarity ||
               filters.attribute ||
@@ -547,7 +540,7 @@ const CharacterList = () => {
             {filteredCharacters.map((character) => (
               <div
                 key={character._id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 dark:bg-gray-700 dark:text-gray-300"
               >
                 <Link
                   key={character._id}
@@ -574,11 +567,11 @@ const CharacterList = () => {
                       </span>
                     </div>
                     <div className="absolute bottom-2 left-2 right-2 px-2 rounded-xl flex justify-between items-center">
-                      <div className="flex  rounded-xl bg-yellow-100 px-1">
+                      <div className="flex  rounded-xl bg-yellow-100 dark:bg-yellow-600 px-1">
                         {[...Array(character.rarity)].map((_, i) => (
                           <svg
                             key={i}
-                            className="h-5 w-5 text-yellow-400"
+                            className="h-5 w-5 text-yellow-400 dark:text-yellow-50"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -587,10 +580,10 @@ const CharacterList = () => {
                         ))}
                       </div>
                       <div className="flex space-x-1">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-blue-50">
                           {character.attribute}
                         </span>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-blue-50">
                           {character.weaponType}
                         </span>
                       </div>
@@ -601,10 +594,10 @@ const CharacterList = () => {
                   <div className="p-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h2 className="text-lg font-bold text-gray-900">
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-300">
                           {character.name}
                         </h2>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                           {character.title}
                         </p>
                       </div>
@@ -612,15 +605,19 @@ const CharacterList = () => {
 
                     {/* Quick Stats */}
                     <div className="mt-3 grid grid-cols-2 gap-2">
-                      <div className="bg-blue-50 p-2 rounded-lg">
-                        <p className="text-xs text-blue-900 font-bold">HP</p>
-                        <p className="font-semibold text-blue-500">
+                      <div className="bg-blue-50 dark:bg-blue-600 p-2 rounded-lg">
+                        <p className="text-xs text-blue-900 dark:text-blue-100 font-bold">
+                          HP
+                        </p>
+                        <p className="font-semibold text-blue-500 dark:text-blue-50">
                           {character.maxHp}
                         </p>
                       </div>
-                      <div className="bg-red-50 p-2 rounded-lg">
-                        <p className="text-xs text-red-900 font-bold">ATK</p>
-                        <p className="font-semibold text-red-500">
+                      <div className="bg-red-50 dark:bg-red-600 p-2 rounded-lg ">
+                        <p className="text-xs text-red-900 dark:text-red-100 font-bold">
+                          ATK
+                        </p>
+                        <p className="font-semibold text-red-500 dark:text-red-50">
                           {character.maxAttack}
                         </p>
                       </div>
@@ -631,21 +628,12 @@ const CharacterList = () => {
                       {character.roles.map((role, i) => (
                         <span
                           key={i}
-                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800"
+                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-600 dark:text-purple-50"
                         >
                           {role}
                         </span>
                       ))}
                     </div>
-
-                    {/* Review Summary */}
-                    {/* <div className="mt-4 space-y-2">
-                      <div className="flex items-start">
-                        <p className="text-xs text-gray-700 line-clamp-2">
-                          {character.finalReview}
-                        </p>
-                      </div>
-                    </div> */}
                   </div>
                 </Link>
               </div>

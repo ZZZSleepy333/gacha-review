@@ -108,8 +108,8 @@ const GachaSimulator = () => {
     // Tỉ lệ mặc định theo yêu cầu mới
     const rates = {
       rarity5: 0.02, // 2%
-      rarity4: 0.16, // 16%
-      rarity3: 0.82, // 82% (đã điều chỉnh để tổng = 100%)
+      rarity4: 0.18, // 16%
+      rarity3: 0.8, // 82% (đã điều chỉnh để tổng = 100%)
     };
 
     // Ánh xạ giá trị rate-up
@@ -955,10 +955,10 @@ const GachaSimulator = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-gray-300">
-                  Crystal đã dùng:
+                  Transient Stone đã dùng:
                 </span>
                 <span className="font-medium text-blue-600 dark:text-blue-400">
-                  {(stats.totalPulls * 150).toLocaleString()}
+                  {(stats.totalPulls * 5).toLocaleString()}
                 </span>
               </div>
             </div>
