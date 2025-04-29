@@ -42,6 +42,7 @@ const GachaSimulator = () => {
     const savedSALevels = localStorage.getItem("gacha_sa_levels");
     return savedSALevels ? JSON.parse(savedSALevels) : {};
   });
+  const [isFetching, setIsFetching] = useState(false);
 
   // Thêm state mới để lưu trữ nhân vật đã quay được
   const [obtainedCharacters, setObtainedCharacters] = useState(() => {
@@ -85,7 +86,7 @@ const GachaSimulator = () => {
   // Fetch danh sách banner khi component mount
   useEffect(() => {
     const fetchBanners = async () => {
-      setIsLoading(true);
+      setIsFetching(true);
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/banners`
@@ -109,7 +110,7 @@ const GachaSimulator = () => {
       } catch (error) {
         console.error("Lỗi khi lấy danh sách banner:", error);
       } finally {
-        setIsLoading(false);
+        setIsFetching(false);
       }
     };
 
@@ -726,7 +727,7 @@ const GachaSimulator = () => {
           </div>
         </div>
 
-        {isLoading ? (
+        {isFetching ? (
           <div className="flex justify-center my-8">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
