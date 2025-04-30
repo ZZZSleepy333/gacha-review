@@ -164,7 +164,7 @@ const CharacterDetail = () => {
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-blue-50 p-4 rounded-lg dark:bg-blue-600">
             <h3 className="text-sm font-medium text-blue-500 dark:text-blue-100">
-              HP ở Max Level
+              HP
             </h3>
             <p className="mt-1 text-2xl font-bold text-blue-900 dark:text-blue-50">
               {character.maxHp}
@@ -172,7 +172,7 @@ const CharacterDetail = () => {
           </div>
           <div className="bg-red-50 p-4 rounded-lg dark:bg-red-600">
             <h3 className="text-sm font-medium text-red-500 dark:text-red-100">
-              ATK ở Max Level
+              ATK
             </h3>
             <p className="mt-1 text-2xl font-bold text-red-900 dark:text-red-50">
               {character.maxAttack}
@@ -218,7 +218,7 @@ const CharacterDetail = () => {
             Đánh giá
           </h2>
           <div className="bg-green-50 dark:bg-green-600 p-4 rounded-lg">
-            <h2 className="text-xl font-semibold text-green-100 mb-4 ">
+            <h2 className="text-xl font-semibold text-green-800 dark:text-green-100 mb-4 ">
               Điểm nổi bật
             </h2>
             <ul className="space-y-2">
