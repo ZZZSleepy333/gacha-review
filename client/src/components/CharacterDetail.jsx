@@ -68,10 +68,10 @@ const CharacterDetail = () => {
   return (
     <div className="max-w-6xl mx-auto bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden">
       {/* Image Section - Top 50% width */}
-      <div className="w-full">
+      <div className="w-full pt-4 md:pt-6">
         <div className="flex justify-center">
           <img
-            className="w-1/2 object-cover"
+            className="w-full object-cover"
             src={character.image || "/placeholder-character.jpg"}
             alt={character.name}
           />
@@ -261,7 +261,7 @@ const CharacterDetail = () => {
                       >
                         <path
                           fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
                           clipRule="evenodd"
                         />
                       </svg>

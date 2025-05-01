@@ -552,7 +552,7 @@ const CharacterList = () => {
                     <img
                       src={character.image || "/placeholder-character.jpg"}
                       alt={character.name}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-48"
                       onError={(e) =>
                         (e.target.src = "/placeholder-character.jpg")
                       }
