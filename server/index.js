@@ -111,6 +111,7 @@ const characterSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: [
+        "Unknown",
         "Akihabara Academy",
         "Ameyoko Costume Academy",
         "Bukuro Academy",
@@ -389,7 +390,7 @@ const crawlCharacters = async () => {
 app.get("/api/crawl", async (req, res) => {
   try {
     const characters = await crawlCharacters();
-    
+
     // Thêm dữ liệu mới
     for (const character of characters) {
       await Available.findOneAndUpdate(
@@ -398,7 +399,7 @@ app.get("/api/crawl", async (req, res) => {
         { upsert: true, new: true }
       );
     }
-    
+
     const availableCharacters = await Available.find();
     res.json(availableCharacters);
   } catch (error) {
@@ -435,21 +436,26 @@ app.put("/api/available", async (req, res) => {
   }
 });
 // Schema cho Banner
-const bannerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  image: { type: String, required: true },
-  characters: [{
-    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Available' },
-    name: { type: String },
-    image: { type: String },
-    rarity: { type: Number },
-    rateUpStatus: { 
-      type: String, 
-      enum: ['normal', 'rateup-1', 'rateup-2'],
-      default: 'normal'
-    }
-  }]
-}, { timestamps: true });
+const bannerSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    image: { type: String, required: true },
+    characters: [
+      {
+        _id: { type: mongoose.Schema.Types.ObjectId, ref: "Available" },
+        name: { type: String },
+        image: { type: String },
+        rarity: { type: Number },
+        rateUpStatus: {
+          type: String,
+          enum: ["normal", "rateup-1", "rateup-2"],
+          default: "normal",
+        },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 const Banner = mongoose.model("Banner", bannerSchema);
 
@@ -482,17 +488,17 @@ app.get("/api/banners/:id", async (req, res) => {
 app.post("/api/banners", async (req, res) => {
   try {
     const { name, image, characters } = req.body;
-    
+
     if (!name || !image) {
       return res.status(400).json({ message: "Thiếu thông tin banner" });
     }
-    
+
     const newBanner = new Banner({
       name,
       image,
-      characters: characters || []
+      characters: characters || [],
     });
-    
+
     const savedBanner = await newBanner.save();
     res.status(201).json(savedBanner);
   } catch (error) {
@@ -505,21 +511,21 @@ app.post("/api/banners", async (req, res) => {
 app.put("/api/banners/:id", async (req, res) => {
   try {
     const { name, image, characters } = req.body;
-    
+
     if (!name || !image) {
       return res.status(400).json({ message: "Thiếu thông tin banner" });
     }
-    
+
     const updatedBanner = await Banner.findByIdAndUpdate(
       req.params.id,
       { name, image, characters },
       { new: true }
     );
-    
+
     if (!updatedBanner) {
       return res.status(404).json({ message: "Không tìm thấy banner" });
     }
-    
+
     res.json(updatedBanner);
   } catch (error) {
     console.error("Lỗi khi cập nhật banner:", error);
@@ -531,11 +537,11 @@ app.put("/api/banners/:id", async (req, res) => {
 app.delete("/api/banners/:id", async (req, res) => {
   try {
     const deletedBanner = await Banner.findByIdAndDelete(req.params.id);
-    
+
     if (!deletedBanner) {
       return res.status(404).json({ message: "Không tìm thấy banner" });
     }
-    
+
     res.json({ message: "Xóa banner thành công" });
   } catch (error) {
     console.error("Lỗi khi xóa banner:", error);

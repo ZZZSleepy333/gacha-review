@@ -50,6 +50,7 @@ const AdminPage = () => {
     "All",
   ];
   const schoolOptions = [
+    "Unknown",
     "Akihabara Academy",
     "Ameyoko Costume Academy",
     "Bukuro Academy",
