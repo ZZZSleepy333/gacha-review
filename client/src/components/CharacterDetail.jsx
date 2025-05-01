@@ -213,12 +213,12 @@ const CharacterDetail = () => {
         </div>
 
         {/* Review Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4 col-span-2 dark:text-gray-300">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4 col-span-1 md:col-span-2 dark:text-gray-300">
             Đánh giá
           </h2>
-          <div className="bg-green-50 dark:bg-green-600 p-4 rounded-lg">
-            <h2 className="text-xl font-semibold text-green-800 dark:text-green-100 mb-4 ">
+          <div className="bg-green-50 dark:bg-green-800 p-4 rounded-lg shadow-sm">
+            <h2 className="text-lg md:text-xl font-semibold text-green-800 dark:text-green-100 mb-3 md:mb-4">
               Điểm nổi bật
             </h2>
             <ul className="space-y-2">
@@ -227,7 +227,7 @@ const CharacterDetail = () => {
                   point.trim() && (
                     <li key={i} className="flex items-start">
                       <svg
-                        className="h-5 w-5 text-green-200 mr-2 mt-0.5 flex-shrink-0"
+                        className="h-5 w-5 text-green-500 dark:text-green-200 mr-2 mt-0.5 flex-shrink-0"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -237,7 +237,7 @@ const CharacterDetail = () => {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="text-gray-700 dark:text-green-50">
+                      <span className="text-gray-800 dark:text-green-50 text-sm md:text-base">
                         {point}
                       </span>
                     </li>
@@ -245,8 +245,8 @@ const CharacterDetail = () => {
               )}
             </ul>
           </div>
-          <div className="bg-red-50 p-4 rounded-lg dark:bg-red-600">
-            <h2 className="text-xl font-semibold text-red-800 dark:text-red-100 mb-4">
+          <div className="bg-red-50 p-4 rounded-lg shadow-sm dark:bg-red-800">
+            <h2 className="text-lg md:text-xl font-semibold text-red-800 dark:text-red-100 mb-3 md:mb-4">
               Điểm lưu ý
             </h2>
             <ul className="space-y-2">
@@ -265,7 +265,7 @@ const CharacterDetail = () => {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="text-gray-700 dark:text-red-50">
+                      <span className="text-gray-800 dark:text-red-50 text-sm md:text-base">
                         {point}
                       </span>
                     </li>
@@ -273,12 +273,12 @@ const CharacterDetail = () => {
               )}
             </ul>
           </div>
-          <div className="bg-gray-50 p-4 rounded-lg col-span-2 dark:bg-gray-600">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
+          <div className="bg-gray-50 p-4 rounded-lg col-span-1 md:col-span-2 shadow-sm dark:bg-gray-600">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-3 md:mb-4">
               Đánh giá tổng quan
             </h2>
             <div
-              className="prose prose-md text-gray-800 dark:text-gray-50 w-full max-w-none"
+              className="prose prose-sm md:prose-md text-gray-800 dark:text-gray-50 w-full max-w-none"
               dangerouslySetInnerHTML={{ __html: character.finalReview }}
             ></div>
           </div>

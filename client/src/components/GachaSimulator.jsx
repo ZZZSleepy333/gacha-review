@@ -646,28 +646,28 @@ const GachaSimulator = () => {
         </h1>
 
         {/* Thông tin Crystal và Vé */}
-        <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-4 mb-6 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
+        <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-3 md:p-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full sm:w-auto mb-2 sm:mb-0">
             <div className="flex items-center">
               <img
                 src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_stone.png"
                 alt="Crystal"
-                className="w-8 h-8 mr-2"
+                className="w-6 h-6 md:w-8 md:h-8 mr-1 md:mr-2"
                 onError={(e) =>
                   (e.target.src = "https://via.placeholder.com/32")
                 }
               />
-              <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+              <span className="text-base md:text-xl font-bold text-blue-600 dark:text-blue-400">
                 {crystals.toLocaleString()}
               </span>
               <button
                 onClick={editCrystals}
-                className="ml-2 p-1 text-gray-500 hover:text-blue-500"
+                className="ml-1 md:ml-2 p-1 text-gray-500 hover:text-blue-500"
                 title="Chỉnh sửa số crystal"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
+                  className="h-3 w-3 md:h-4 md:w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -686,22 +686,22 @@ const GachaSimulator = () => {
               <img
                 src="https://cdn.housamo.xyz/housamo/unity/Android/icon_item/icon_item_gachaticket.png"
                 alt="Ticket"
-                className="w-8 h-8 mr-2"
+                className="w-6 h-6 md:w-8 md:h-8 mr-1 md:mr-2"
                 onError={(e) =>
                   (e.target.src = "https://via.placeholder.com/32")
                 }
               />
-              <span className="text-xl font-bold text-yellow-600 dark:text-yellow-400">
+              <span className="text-base md:text-xl font-bold text-yellow-600 dark:text-yellow-400">
                 {tickets.toLocaleString()}
               </span>
               <button
                 onClick={editTickets}
-                className="ml-2 p-1 text-gray-500 hover:text-green-500"
+                className="ml-1 md:ml-2 p-1 text-gray-500 hover:text-green-500"
                 title="Chỉnh sửa số vé"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
+                  className="h-3 w-3 md:h-4 md:w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -790,7 +790,7 @@ const GachaSimulator = () => {
                   Nhân vật Rate-Up
                 </h3>
                 {selectedBanner && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center sm:justify-start">
                     {selectedBanner.characters
                       .filter(
                         (char) =>
@@ -808,10 +808,10 @@ const GachaSimulator = () => {
                       .map((char) => (
                         <div
                           key={char._id}
-                          className="flex flex-col items-center w-fit"
+                          className="flex flex-col items-center w-14 sm:w-16 mb-1"
                         >
                           <div
-                            className={`relative w-16 h-16 rounded-br-md rounded-tl overflow-hidden border-2 ${
+                            className={`relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-br-md rounded-tl overflow-hidden border-2 ${
                               char.rarity === 5
                                 ? "border-yellow-400"
                                 : char.rarity === 4
@@ -827,11 +827,11 @@ const GachaSimulator = () => {
                                 (e.target.src = "/placeholder-character.jpg")
                               }
                             />
-                            <div className="absolute bottom-0 right-0 w-5 h-5 bg-yellow-500 rounded-br-md rounded-tl flex items-center justify-center text-xs text-white font-bold">
+                            <div className="absolute bottom-0 right-0 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-br-md rounded-tl flex items-center justify-center text-xs text-white font-bold">
                               {char.rarity}
                             </div>
                           </div>
-                          <div className="w-full h-10 flex flex-col items-center justify-start">
+                          <div className="w-full h-8 sm:h-10 flex flex-col items-center justify-start">
                             <span className="text-xs mt-1 text-center text-gray-700 dark:text-gray-300 line-clamp-1 w-full">
                               {char.name}
                             </span>
