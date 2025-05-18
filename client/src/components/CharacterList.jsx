@@ -11,6 +11,8 @@ import {
   faGhost, // Icon cho Halloween Variant
   faBookOpen, // Icon cho Main Story Variant
   faUserClock, // Icon cho Welfare (hoặc một icon phù hợp)
+  faFilter, // Added for filter toggle
+  faTimesCircle, // Added for clear filters
 } from "@fortawesome/free-solid-svg-icons";
 
 const CharacterList = () => {
@@ -24,6 +26,7 @@ const CharacterList = () => {
     characterType: [],
     adminReview: [],
   });
+  const [showFilters, setShowFilters] = useState(true); // For mobile filter toggle
 
   // Fetch characters
   useEffect(() => {
@@ -228,46 +231,93 @@ const CharacterList = () => {
   const ratingColor = (rating) => {
     switch (rating) {
       case "S+":
-        return "bg-gradient-to-r from-purple-600 to-pink-600";
+        return "bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500";
       case "S":
-        return "bg-red-600";
+        return "bg-red-600 dark:bg-red-500";
       case "A+":
-        return "bg-orange-500";
+        return "bg-orange-500 dark:bg-orange-400";
       case "A":
-        return "bg-yellow-500";
+        return "bg-yellow-500 dark:bg-yellow-400";
       case "B":
-        return "bg-green-500";
+        return "bg-green-500 dark:bg-green-400";
       case "C":
-        return "bg-blue-500";
+        return "bg-blue-500 dark:bg-blue-400";
       case "D":
-        return "bg-gray-500";
+        return "bg-gray-500 dark:bg-gray-400";
       default:
-        return "bg-gray-200";
+        return "bg-gray-200 dark:bg-gray-600";
     }
   };
 
-  console.log(typeof attributes);
+  // Check if any filters are active
+  const hasActiveFilters = () => {
+    return (
+      filters.rarity.length > 0 ||
+      filters.attribute.length > 0 ||
+      filters.weaponType.length > 0 ||
+      filters.characterType.length > 0 ||
+      filters.adminReview.length > 0 ||
+      searchTerm.length > 0
+    );
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setFilters({
+      rarity: [],
+      attribute: [],
+      weaponType: [],
+      characterType: [],
+      adminReview: [],
+    });
+    setSearchTerm("");
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        {/* Mobile Filter Toggle */}
+        <div className="md:hidden mb-4 flex justify-between items-center">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+          >
+            <FontAwesomeIcon icon={faFilter} className="mr-2" />
+            {showFilters ? "Hide Filters" : "Show Filters"}
+          </button>
+
+          {hasActiveFilters() && (
+            <button
+              onClick={clearAllFilters}
+              className="flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200"
+            >
+              <FontAwesomeIcon icon={faTimesCircle} className="mr-2" />
+              Clear All
+            </button>
+          )}
+        </div>
+
         {/* Filter/Search Bar */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 mb-8 ">
-          <div className="flex flex-col md:flex-col items-start  gap-4">
+        <div
+          className={`bg-white dark:bg-gray-800 shadow rounded-lg p-4 mb-8 transition-all duration-300 ${
+            showFilters ? "block" : "hidden md:block"
+          }`}
+        >
+          <div className="flex flex-col md:flex-col items-start gap-4">
             {/* Search Input */}
-            <div className="flex-1 flex flex-col md:flex-row gap-4">
-              <div>
+            <div className="flex-1 flex flex-col md:flex-row gap-4 w-full">
+              <div className="w-full md:w-auto">
                 <label
                   htmlFor="search"
-                  className="block text-sm font-medium text-gray-700 dark:text-white mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
                 >
                   Tìm kiếm nhân vật
                 </label>
                 <div className="relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="h-5 w-5 text-gray-400 dark:text-gray-100"
+                      className="h-5 w-5 text-gray-400 dark:text-gray-300"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
@@ -282,7 +332,7 @@ const CharacterList = () => {
                   <input
                     type="text"
                     id="search"
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-300  dark:text-gray-100 dark:bg-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                     placeholder="Search by name or title..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -290,8 +340,8 @@ const CharacterList = () => {
                 </div>
               </div>
               {/* Tier Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <div className="w-full md:w-auto">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Đánh giá nhân vật
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -309,10 +359,10 @@ const CharacterList = () => {
                             adminReview: newAdminReviews,
                           });
                         }}
-                        className={`flex items-center justify-center w-8 h-8 rounded-full border transition text-sm font-semibold ${
+                        className={`flex items-center justify-center w-8 h-8 rounded-full border transition-all duration-200 text-sm font-semibold ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600 "
-                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-blue-600 dark:border-blue-700"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
                         }`}
                       >
                         {review}
@@ -322,10 +372,10 @@ const CharacterList = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-4 w-full">
               {/* Rarity Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <div className="w-full md:w-auto">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Độ hiếm
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -340,16 +390,16 @@ const CharacterList = () => {
                             : [...filters.rarity, attr.value];
                           setFilters({ ...filters, rarity: newRarities });
                         }}
-                        className={`flex flex-col items-center justify-center p-2 rounded-lg border transition ${
+                        className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all duration-200 ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
-                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-blue-600 dark:border-blue-700"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
                         }`}
                       >
                         <img
                           src={attr.image}
                           alt={attr.value}
-                          className="w-8 h-8 mb-1"
+                          className="w-8 h-8 mb-1 filter dark:brightness-110"
                         />
                         <span className="text-xs">{attr.value}</span>
                       </button>
@@ -358,8 +408,8 @@ const CharacterList = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+              <div className="w-full md:w-auto">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Loại nhân vật
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -379,17 +429,17 @@ const CharacterList = () => {
                             characterType: newCharacterTypes,
                           });
                         }}
-                        className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg border transition text-sm ${
+                        className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg border transition-all duration-200 text-sm ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
-                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-blue-600 dark:border-blue-700"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
                         }`}
                       >
                         {icon && (
                           <div className="flex justify-center items-center w-full">
                             <FontAwesomeIcon
                               icon={icon}
-                              className="w-8 h-8 mb-1"
+                              className="w-6 h-6 mb-1"
                             />
                           </div>
                         )}
@@ -402,10 +452,10 @@ const CharacterList = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-4 w-full">
               {/* Weapon Type Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <div className="w-full md:w-auto">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Tầm đánh
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -423,16 +473,16 @@ const CharacterList = () => {
                             weaponType: newWeaponTypes,
                           });
                         }}
-                        className={`flex flex-col items-center justify-center p-2 rounded-lg border transition ${
+                        className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all duration-200 ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
-                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-blue-600 dark:border-blue-700"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
                         }`}
                       >
                         <img
                           src={attr.image}
                           alt={attr.value}
-                          className="w-8 h-8 mb-1"
+                          className="w-8 h-8 mb-1 filter dark:brightness-110"
                         />
                         <span className="text-xs">{attr.value}</span>
                       </button>
@@ -442,8 +492,8 @@ const CharacterList = () => {
               </div>
 
               {/* Attribute Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <div className="w-full md:w-auto">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Hệ nguyên tố
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -458,16 +508,16 @@ const CharacterList = () => {
                             : [...filters.attribute, attr.value];
                           setFilters({ ...filters, attribute: newAttributes });
                         }}
-                        className={`flex flex-col items-center justify-center p-2 rounded-lg border transition ${
+                        className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all duration-200 ${
                           selected
-                            ? "bg-blue-500 border-blue-600 text-white dark:bg-gray-700 dark:text-gray-300 dark:border-blue-600"
-                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-300 hover:dark:bg-gray-300 hover:text-gray-100 hover:dark:text-gray-600"
+                            ? "bg-blue-500 border-blue-600 text-white dark:bg-blue-600 dark:border-blue-700"
+                            : "bg-white border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
                         }`}
                       >
                         <img
                           src={attr.image}
                           alt={attr.value}
-                          className="w-8 h-8 mb-1"
+                          className="w-8 h-8 mb-1 filter dark:brightness-110"
                         />
                         <span className="text-xs">{attr.value}</span>
                       </button>
@@ -477,25 +527,14 @@ const CharacterList = () => {
               </div>
             </div>
 
-            {/* Reset Filters */}
-            {(filters.rarity ||
-              filters.attribute ||
-              filters.weaponType ||
-              filters.characterType ||
-              filters.tier) && (
+            {/* Reset Filters - Desktop */}
+            {hasActiveFilters() && (
               <button
-                onClick={() =>
-                  setFilters({
-                    rarity: [],
-                    attribute: [],
-                    weaponType: [],
-                    characterType: [],
-                    adminReview: [],
-                  })
-                }
-                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-50 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500  "
+                onClick={clearAllFilters}
+                className="hidden md:block px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
               >
-                Reset
+                <FontAwesomeIcon icon={faTimesCircle} className="mr-2" />
+                Reset All Filters
               </button>
             )}
           </div>
@@ -504,12 +543,12 @@ const CharacterList = () => {
         {/* Character Grid */}
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
           </div>
         ) : filteredCharacters.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-lg shadow dark:bg-gray-700">
+          <div className="text-center py-16 bg-white rounded-lg shadow dark:bg-gray-800 transition-colors duration-200">
             <svg
-              className="mx-auto h-12 w-12 text-gray-400"
+              className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -521,57 +560,61 @@ const CharacterList = () => {
                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+            <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-gray-200">
               Không tìm thấy nhân vật nào
             </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">
-              {searchTerm ||
-              filters.rarity ||
-              filters.attribute ||
-              filters.weaponType ||
-              filters.characterType ||
-              filters.adminReview
-                ? "Hãy thử tìm kiếm khác"
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {hasActiveFilters()
+                ? "Hãy thử tìm kiếm khác hoặc điều chỉnh bộ lọc"
                 : "Không có nhân vật nào trong danh sách"}
             </p>
+            {hasActiveFilters() && (
+              <button
+                onClick={clearAllFilters}
+                className="mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+              >
+                Xóa bộ lọc
+              </button>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCharacters.map((character) => (
-              <div
+              <Link
                 key={character._id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 dark:bg-gray-700 dark:text-gray-300"
+                to={`/characters/${character._id}`}
+                className="group"
               >
-                <Link
-                  key={character._id}
-                  to={`/characters/${character._id}`}
-                  className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-                >
-                  {/* Character Image with Rating Badge */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition transform hover:scale-105 hover:shadow-lg duration-200 h-full flex flex-col">
+                  {/* Character Image */}
                   <div className="relative">
                     <img
-                      src={character.image || "/placeholder-character.jpg"}
+                      src={character.image}
                       alt={character.name}
-                      className="w-full h-full "
-                      onError={(e) =>
-                        (e.target.src = "/placeholder-character.jpg")
-                      }
+                      className="w-full h-48 object-cover object-center"
+                      loading="lazy"
                     />
-                    <div className="absolute top-2 right-2">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold text-white ${ratingColor(
+                    {/* Rating Badge */}
+                    {character.adminReview && (
+                      <div
+                        className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center text-white font-bold rounded-full ${ratingColor(
                           character.adminReview
                         )}`}
                       >
                         {character.adminReview}
-                      </span>
-                    </div>
-                    <div className="absolute bottom-2 left-2 right-2 px-2 rounded-xl flex justify-between items-center">
-                      <div className="flex  rounded-xl bg-yellow-100 dark:bg-yellow-600 px-1">
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Character Info */}
+                  <div className="p-4 flex-grow flex flex-col">
+                    <div className="flex items-center mb-2">
+                      {/* Rarity */}
+                      <div className="flex mr-2">
                         {[...Array(character.rarity)].map((_, i) => (
                           <svg
                             key={i}
-                            className="h-5 w-5 text-yellow-400 dark:text-yellow-50"
+                            className="w-4 h-4 text-yellow-400"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -579,64 +622,54 @@ const CharacterList = () => {
                           </svg>
                         ))}
                       </div>
-                      <div className="flex space-x-1">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-blue-50">
-                          {character.attribute}
-                        </span>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-blue-50">
-                          {character.weaponType}
-                        </span>
-                      </div>
+
+                      {/* Attribute */}
+                      {character.attribute && (
+                        <img
+                          src={
+                            attributes.find(
+                              (attr) => attr.value === character.attribute
+                            )?.image
+                          }
+                          alt={character.attribute}
+                          className="w-5 h-5 mr-1"
+                        />
+                      )}
+
+                      {/* Weapon Type */}
+                      {character.weaponType && (
+                        <img
+                          src={
+                            weaponTypes.find(
+                              (w) => w.value === character.weaponType
+                            )?.image
+                          }
+                          alt={character.weaponType}
+                          className="w-5 h-5"
+                        />
+                      )}
                     </div>
+
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1 line-clamp-1">
+                      {character.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 italic mb-2 line-clamp-1">
+                      {character.title}
+                    </p>
+
+                    {/* Character Type */}
+                    {character.characterType && (
+                      <div className="mt-auto pt-2 flex items-center text-xs text-gray-500 dark:text-gray-400">
+                        <FontAwesomeIcon
+                          icon={characterTypeIcons[character.characterType]}
+                          className="mr-1"
+                        />
+                        {character.characterType}
+                      </div>
+                    )}
                   </div>
-
-                  {/* Character Info */}
-                  <div className="p-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                          {character.name}
-                        </h2>
-                        <p className="text-sm text-gray-600 dark:text-gray-50">
-                          {character.title}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Quick Stats */}
-                    <div className="mt-3 grid grid-cols-2 gap-2">
-                      <div className="bg-blue-50 dark:bg-blue-600 p-2 rounded-lg">
-                        <p className="text-xs text-blue-900 dark:text-blue-100 font-bold">
-                          HP
-                        </p>
-                        <p className="font-semibold text-blue-500 dark:text-blue-50">
-                          {character.maxHp}
-                        </p>
-                      </div>
-                      <div className="bg-red-50 dark:bg-red-600 p-2 rounded-lg ">
-                        <p className="text-xs text-red-900 dark:text-red-100 font-bold">
-                          ATK
-                        </p>
-                        <p className="font-semibold text-red-500 dark:text-red-50">
-                          {character.maxAttack}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Roles */}
-                    <div className="mt-3 flex flex-wrap gap-1">
-                      {character.roles.map((role, i) => (
-                        <span
-                          key={i}
-                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-600 dark:text-purple-50"
-                        >
-                          {role}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </Link>
-              </div>
+                </div>
+              </Link>
             ))}
           </div>
         )}
