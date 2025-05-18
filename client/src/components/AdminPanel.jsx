@@ -12,7 +12,7 @@ const AdminPage = () => {
   const attributeOptions = [
     "Fire",
     "Water",
-    "Wind",
+    "Wood",
     "Aether",
     "Nether",
     "All",

@@ -80,7 +80,7 @@ const characterSchema = new mongoose.Schema(
       enum: [
         "Fire",
         "Water",
-        "Wind",
+        "Wood",
         "Aether",
         "Nether",
         "All",
