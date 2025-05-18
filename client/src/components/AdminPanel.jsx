@@ -132,7 +132,7 @@ const AdminPage = () => {
     attribute: attributeOptions[0],
     weaponType: weaponTypeOptions[0],
     school: schoolOptions[0],
-    guild: guildOptions[0],
+    guild: [], // Thay đổi từ guildOptions[0] thành mảng rỗng
     affiliation: affiliationOptions[0],
     roles: [],
     voiceActors: "",
@@ -204,7 +204,7 @@ const AdminPage = () => {
     }
   };
 
-  // Tính toán phân trang
+  // Tính toán phan trang
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = availableCharacters.slice(
@@ -359,7 +359,7 @@ const AdminPage = () => {
       attribute: attributeOptions[0],
       weaponType: weaponTypeOptions[0],
       school: schoolOptions[0],
-      guild: guildOptions[0],
+      guild: [], // Thay đổi từ guildOptions[0] thành mảng rỗng
       affiliation: affiliationOptions[0],
       roles: [],
       voiceActors: "",

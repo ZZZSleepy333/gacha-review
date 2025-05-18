@@ -140,7 +140,7 @@ const characterSchema = new mongoose.Schema(
       ],
     },
     guild: {
-      type: String,
+      type: [String],
       required: true,
       enum: [
         "Summoners",

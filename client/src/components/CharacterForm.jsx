@@ -194,18 +194,59 @@ const CharacterForm = ({
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
                     Guild
                   </label>
-                  <select
-                    name="guild"
-                    value={formData.guild}
-                    onChange={handleChange}
-                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    required
-                  >
-                    {guildOptions.map((guild) => (
-                      <option key={guild} value={guild}>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {Array.isArray(formData.guild) ? formData.guild.map((guild) => (
+                      <span
+                        key={guild}
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                      >
                         {guild}
-                      </option>
-                    ))}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              guild: prev.guild.filter((g) => g !== guild),
+                            }));
+                          }}
+                          className="ml-1 text-blue-500 hover:text-blue-700"
+                        >
+                          &times;
+                        </button>
+                      </span>
+                    )) : null}
+                  </div>
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        const selectedGuild = e.target.value;
+                        if (!Array.isArray(formData.guild)) {
+                          // Nếu guild không phải là mảng, chuyển đổi nó thành mảng
+                          setFormData((prev) => ({
+                            ...prev,
+                            guild: [selectedGuild],
+                          }));
+                        } else if (!formData.guild.includes(selectedGuild)) {
+                          // Nếu guild là mảng và giá trị chưa tồn tại, thêm vào
+                          setFormData((prev) => ({
+                            ...prev,
+                            guild: [...prev.guild, selectedGuild],
+                          }));
+                        }
+                        e.target.value = ""; // Reset select
+                      }
+                    }}
+                    value=""
+                    className="dark:bg-gray-600 dark:text-gray-50 border p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="">Chọn Guild...</option>
+                    {guildOptions
+                      .filter((guild) => !Array.isArray(formData.guild) || !formData.guild.includes(guild))
+                      .map((guild) => (
+                        <option key={guild} value={guild}>
+                          {guild}
+                        </option>
+                      ))}
                   </select>
                 </div>
 
